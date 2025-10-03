@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="E-Math-Sci School - Enhancing math and science lovers to high heights" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>E-Math-Sci School</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      .App {
+        text-align: center;
+      }
+      
+      .header {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: white;
+        padding: 2rem;
+        text-align: center;
+      }
+      
+      .header h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      
+      .header p {
+        font-size: 1.5rem;
+        opacity: 0.9;
+      }
+      
+      .main {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+      
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      
+      .feature {
+        background: #f3f4f6;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+      }
+      
+      .cta {
+        background: #10b981;
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+      }
+      
+      .buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+      
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      
+      .btn-primary {
+        background: white;
+        color: #10b981;
+      }
+      
+      .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+      
+      .footer {
+        background: #1f2937;
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <!-- Fallback content while React loads -->
+      <div class="App">
+        <header class="header">
+          <h1>📚 E-Math-Sci School</h1>
+          <p>Enhancing math and science lovers to high heights</p>
+        </header>
+        
+        <main class="main">
+          <div class="card">
+            <h2 style="color: #1f2937; margin-bottom: 1rem;">
+              Welcome to E-Math-Sci School!
+            </h2>
+            <p style="color: #6b7280; margin-bottom: 1.5rem;">
+              Your comprehensive platform for math and science education. 
+              Explore courses, take quizzes, track your progress, and enhance your learning journey.
+            </p>
+            
+            <div class="features">
+              <div class="feature">
+                <h3 style="color: #1f2937; margin-bottom: 0.5rem;">🎓 Courses</h3>
+                <p style="color: #6b7280;">Browse comprehensive math and science courses</p>
+              </div>
+              
+              <div class="feature">
+                <h3 style="color: #1f2937; margin-bottom: 0.5rem;">📝 Assignments</h3>
+                <p style="color: #6b7280;">Submit and track your assignments</p>
+              </div>
+              
+              <div class="feature">
+                <h3 style="color: #1f2937; margin-bottom: 0.5rem;">🧠 Quizzes</h3>
+                <p style="color: #6b7280;">Test your knowledge with interactive quizzes</p>
+              </div>
+              
+              <div class="feature">
+                <h3 style="color: #1f2937; margin-bottom: 0.5rem;">📊 Analytics</h3>
+                <p style="color: #6b7280;">Track your learning progress</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="cta">
+            <h3 style="margin-bottom: 1rem;">🚀 Ready to Start Learning?</h3>
+            <p style="margin-bottom: 1rem;">
+              The E-Math-Sci School platform is now running successfully!
+            </p>
+            <div class="buttons">
+              <button class="btn btn-primary">Explore Courses</button>
+              <button class="btn btn-secondary">Take Quiz</button>
+            </div>
+          </div>
+        </main>
+        
+        <footer class="footer">
+          <p>&copy; 2024 E-Math-Sci School. All rights reserved.</p>
+          <p style="margin-top: 0.5rem; opacity: 0.8;">
+            Built with React, Node.js, and MongoDB
+          </p>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
