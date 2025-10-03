@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Math-Sci School - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .status {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            font-weight: 500;
+        }
+        
+        .status-value {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .success {
+            background: #10b981;
+        }
+        
+        .warning {
+            background: #f59e0b;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #2563eb;
+        }
+        
+        .btn-primary:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #2563eb;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .api-test {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+        }
+        
+        .api-response {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            📚 E-Math-Sci School
+        </div>
+        
+        <h1 class="title">Welcome to E-Math-Sci School!</h1>
+        <p class="subtitle">Enhancing math and science lovers to high heights</p>
+        
+        <div class="status">
+            <h3>System Status</h3>
+            <div class="status-item">
+                <span class="status-label">Backend API</span>
+                <span class="status-value success" id="backend-status">Running</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Frontend</span>
+                <span class="status-value warning" id="frontend-status">Loading...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Database</span>
+                <span class="status-value warning">Mock Data</span>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🎓 Comprehensive Courses</h3>
+                <p>Access a wide range of math and science courses designed by expert educators for all skill levels.</p>
+            </div>
+            <div class="feature">
+                <h3>👨‍🏫 Expert Instructors</h3>
+                <p>Learn from experienced teachers and industry professionals who are passionate about education.</p>
+            </div>
+            <div class="feature">
+                <h3>📱 Mobile Friendly</h3>
+                <p>Fully responsive design that works perfectly on phones, tablets, and desktops.</p>
+            </div>
+            <div class="feature">
+                <h3>📊 Progress Tracking</h3>
+                <p>Monitor your learning journey with detailed analytics and personalized recommendations.</p>
+            </div>
+        </div>
+        
+        <div class="api-test">
+            <h3>API Test</h3>
+            <p>Testing backend connection...</p>
+            <div class="api-response" id="api-response">Loading...</div>
+        </div>
+        
+        <div class="buttons">
+            <a href="http://localhost:5000/api/health" class="btn btn-primary" target="_blank">
+                Test Backend API
+            </a>
+            <a href="http://localhost:3000" class="btn btn-secondary" target="_blank">
+                Open Frontend
+            </a>
+        </div>
+        
+        <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
+            <p>🚀 <strong>Backend API:</strong> http://localhost:5000/api</p>
+            <p>🌐 <strong>Frontend:</strong> http://localhost:3000</p>
+            <p>📚 <strong>Health Check:</strong> http://localhost:5000/api/health</p>
+        </div>
+    </div>
+
+    <script>
+        // Test API connection
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                document.getElementById('api-response').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('backend-status').textContent = 'Running';
+                document.getElementById('backend-status').className = 'status-value success';
+            } catch (error) {
+                document.getElementById('api-response').textContent = 'Error: ' + error.message;
+                document.getElementById('backend-status').textContent = 'Error';
+                document.getElementById('backend-status').className = 'status-value warning';
+            }
+        }
+        
+        // Test frontend
+        async function testFrontend() {
+            try {
+                const response = await fetch('http://localhost:3000');
+                if (response.ok) {
+                    document.getElementById('frontend-status').textContent = 'Running';
+                    document.getElementById('frontend-status').className = 'status-value success';
+                } else {
+                    document.getElementById('frontend-status').textContent = 'Not Ready';
+                    document.getElementById('frontend-status').className = 'status-value warning';
+                }
+            } catch (error) {
+                document.getElementById('frontend-status').textContent = 'Not Running';
+                document.getElementById('frontend-status').className = 'status-value warning';
+            }
+        }
+        
+        // Run tests
+        testAPI();
+        testFrontend();
+        
+        // Refresh every 5 seconds
+        setInterval(() => {
+            testAPI();
+            testFrontend();
+        }, 5000);
+    </script>
+</body>
+</html>
