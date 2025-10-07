@@ -1,42 +1,109 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  FaUsers, FaChalkboardTeacher, FaBook, FaClipboardList, FaChartBar, 
+  FaCog, FaBell, FaSignOutAlt, FaPlus, FaEdit, FaTrash, FaEye,
+  FaGraduationCap, FaUserPlus, FaBookOpen, FaTasks, FaCalendarAlt,
+  FaFileAlt, FaVideo, FaImage, FaDownload, FaUpload, FaSearch,
+  FaFilter, FaSort, FaChevronDown, FaChevronUp, FaCheck, FaTimes,
+  FaClock, FaCheckCircle, FaExclamationTriangle, FaInfoCircle,
+  FaArrowUp, FaArrowDown, FaMinus, FaCrown, FaStar, FaTrophy
+} from 'react-icons/fa';
 
 const AdminDashboardPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [notifications, setNotifications] = useState(3);
 
   const stats = {
-    totalStudents: 487,
-    totalTeachers: 52,
-    activeClasses: 24,
-    pendingApprovals: 8,
-    newRegistrations: 15,
-    systemAlerts: 3
+    students: 487,
+    teachers: 52,
+    classes: 24,
+    courses: 18,
+    assignments: 156,
+    pending: 8,
+    revenue: 125000,
+    growth: 12.5
   };
 
-  const recentRegistrations = [
-    { id: 1, name: 'John Smith', grade: 'Grade 9', program: 'High School Advanced', date: '2024-03-15', status: 'pending' },
-    { id: 2, name: 'Emily Davis', grade: 'Grade 6', program: 'Middle School STEM', date: '2024-03-14', status: 'approved' },
-    { id: 3, name: 'Michael Brown', grade: 'Grade 3', program: 'Elementary Math', date: '2024-03-14', status: 'pending' },
-    { id: 4, name: 'Sarah Wilson', grade: 'Grade 11', program: 'High School Advanced', date: '2024-03-13', status: 'approved' }
-  ];
-
-  const pendingApprovals = [
-    { id: 1, type: 'Student Registration', name: 'John Smith', details: 'Grade 9 - High School Advanced', priority: 'high' },
-    { id: 2, type: 'Teacher Application', name: 'Dr. Lisa Johnson', details: 'Mathematics Department', priority: 'medium' },
-    { id: 3, type: 'Course Request', name: 'Advanced Calculus', details: 'Requested by Ms. Chen', priority: 'low' },
-    { id: 4, type: 'Resource Upload', name: 'Physics Lab Manual', details: 'Uploaded by Prof. Williams', priority: 'medium' }
+  const recentActivity = [
+    { 
+      id: 1, 
+      type: 'student', 
+      message: 'New student registration: John Smith', 
+      time: '2 hours ago', 
+      status: 'pending',
+      priority: 'high',
+      avatar: 'JS'
+    },
+    { 
+      id: 2, 
+      type: 'course', 
+      message: 'New lesson uploaded: Advanced Calculus', 
+      time: '4 hours ago', 
+      status: 'completed',
+      priority: 'medium',
+      avatar: 'AC'
+    },
+    { 
+      id: 3, 
+      type: 'teacher', 
+      message: 'Teacher application approved: Dr. Lisa Johnson', 
+      time: '6 hours ago', 
+      status: 'completed',
+      priority: 'low',
+      avatar: 'LJ'
+    },
+    { 
+      id: 4, 
+      type: 'assignment', 
+      message: 'Assignment submitted: Math Homework #3', 
+      time: '8 hours ago', 
+      status: 'pending',
+      priority: 'medium',
+      avatar: 'MH'
+    }
   ];
 
   const systemAlerts = [
-    { id: 1, type: 'warning', message: 'Server load is high (85%)', time: '2 hours ago' },
-    { id: 2, type: 'info', message: 'New student registrations require review', time: '4 hours ago' },
-    { id: 3, type: 'success', message: 'Backup completed successfully', time: '6 hours ago' }
+    { 
+      id: 1, 
+      type: 'warning', 
+      message: 'Server load is high (85%)', 
+      time: '2 hours ago', 
+      action: 'Dismiss',
+      icon: FaExclamationTriangle
+    },
+    { 
+      id: 2, 
+      type: 'info', 
+      message: 'New student registrations require review', 
+      time: '4 hours ago', 
+      action: 'Review',
+      icon: FaInfoCircle
+    },
+    { 
+      id: 3, 
+      type: 'success', 
+      message: 'Backup completed successfully', 
+      time: '6 hours ago', 
+      action: null,
+      icon: FaCheckCircle
+    }
   ];
 
-  const classes = [
-    { id: 1, name: 'Algebra Basics', teacher: 'Ms. Emily Chen', students: 25, status: 'active', nextClass: 'Today 2:00 PM' },
-    { id: 2, name: 'Chemistry Lab', teacher: 'Prof. Michael Johnson', students: 20, status: 'active', nextClass: 'Tomorrow 10:00 AM' },
-    { id: 3, name: 'Physics Advanced', teacher: 'Dr. Sarah Williams', students: 18, status: 'active', nextClass: 'Wednesday 3:00 PM' },
-    { id: 4, name: 'Elementary Math', teacher: 'Ms. Lisa Brown', students: 30, status: 'active', nextClass: 'Today 9:00 AM' }
+  const topStudents = [
+    { name: 'Alex Johnson', grade: 'Grade 11', score: 98, subject: 'Mathematics' },
+    { name: 'Sarah Chen', grade: 'Grade 10', score: 96, subject: 'Physics' },
+    { name: 'Michael Brown', grade: 'Grade 9', score: 94, subject: 'Chemistry' },
+    { name: 'Emily Davis', grade: 'Grade 12', score: 92, subject: 'Advanced Math' }
+  ];
+
+  const upcomingEvents = [
+    { title: 'Parent-Teacher Conference', date: 'March 20, 2024', time: '2:00 PM', type: 'meeting' },
+    { title: 'Science Fair', date: 'March 25, 2024', time: '9:00 AM', type: 'event' },
+    { title: 'Math Competition', date: 'March 30, 2024', time: '10:00 AM', type: 'competition' },
+    { title: 'Staff Meeting', date: 'April 2, 2024', time: '3:00 PM', type: 'meeting' }
   ];
 
   const handleApprove = (id) => {
@@ -49,320 +116,717 @@ const AdminDashboardPage = () => {
     // Handle rejection logic
   };
 
+  const dismissNotification = () => {
+    setNotifications(0);
+  };
+
   return (
     <div className="admin-dashboard">
-      {/* Header */}
-      <div className="admin-header">
-        <div className="container">
-          <div className="header-content">
-            <h1>Admin Dashboard</h1>
-            <div className="admin-actions">
-              <button className="btn-primary">Add New Student</button>
-              <button className="btn-secondary">Upload Content</button>
-              <button className="btn-outline">System Settings</button>
+      {/* Modern Header */}
+      <header className="admin-header">
+        <div className="admin-header-content">
+          <div className="admin-brand">
+            <div className="admin-logo">
+              <FaGraduationCap />
+            </div>
+            <div className="admin-title">
+              <h1>E-School Admin</h1>
+              <span>Management Dashboard</span>
+            </div>
+          </div>
+          
+          <div className="admin-header-actions">
+            <div className="admin-search">
+              <FaSearch />
+              <input type="text" placeholder="Search students, teachers, courses..." />
+            </div>
+            
+            <button className="admin-notification-btn" onClick={dismissNotification}>
+              <FaBell />
+              {notifications > 0 && <span className="notification-badge">{notifications}</span>}
+            </button>
+            
+            <div className="admin-user-menu">
+              <div className="admin-user-avatar">
+                <FaCrown />
+              </div>
+              <div className="admin-user-info">
+                <span className="admin-user-name">Admin User</span>
+                <span className="admin-user-role">Administrator</span>
+              </div>
+              <FaChevronDown />
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Navigation Tabs */}
-      <div className="admin-nav">
-        <div className="container">
-          <div className="nav-tabs">
+      <div className="admin-layout">
+        {/* Modern Sidebar */}
+        <aside className={`admin-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+          <div className="sidebar-header">
             <button 
-              className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
+              className="sidebar-toggle"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            >
+              {sidebarCollapsed ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+          </div>
+          
+          <nav className="admin-nav">
+            <button 
+              className={`admin-nav-item ${activeTab === 'overview' ? 'active' : ''}`}
               onClick={() => setActiveTab('overview')}
             >
-              📊 Overview
+              <FaChartBar />
+              <span>Overview</span>
             </button>
+            
             <button 
-              className={`nav-tab ${activeTab === 'students' ? 'active' : ''}`}
+              className={`admin-nav-item ${activeTab === 'students' ? 'active' : ''}`}
               onClick={() => setActiveTab('students')}
             >
-              👥 Students
+              <FaUsers />
+              <span>Students</span>
+              <span className="nav-badge">{stats.students}</span>
             </button>
+            
             <button 
-              className={`nav-tab ${activeTab === 'teachers' ? 'active' : ''}`}
+              className={`admin-nav-item ${activeTab === 'teachers' ? 'active' : ''}`}
               onClick={() => setActiveTab('teachers')}
             >
-              👨‍🏫 Teachers
+              <FaChalkboardTeacher />
+              <span>Teachers</span>
+              <span className="nav-badge">{stats.teachers}</span>
             </button>
+            
             <button 
-              className={`nav-tab ${activeTab === 'classes' ? 'active' : ''}`}
-              onClick={() => setActiveTab('classes')}
+              className={`admin-nav-item ${activeTab === 'courses' ? 'active' : ''}`}
+              onClick={() => setActiveTab('courses')}
             >
-              🎓 Classes
+              <FaBook />
+              <span>Courses</span>
+              <span className="nav-badge">{stats.courses}</span>
             </button>
+            
             <button 
-              className={`nav-tab ${activeTab === 'approvals' ? 'active' : ''}`}
-              onClick={() => setActiveTab('approvals')}
+              className={`admin-nav-item ${activeTab === 'assignments' ? 'active' : ''}`}
+              onClick={() => setActiveTab('assignments')}
             >
-              ✅ Approvals
+              <FaClipboardList />
+              <span>Assignments</span>
+              <span className="nav-badge">{stats.assignments}</span>
             </button>
+            
             <button 
-              className={`nav-tab ${activeTab === 'content' ? 'active' : ''}`}
+              className={`admin-nav-item ${activeTab === 'content' ? 'active' : ''}`}
               onClick={() => setActiveTab('content')}
             >
-              📚 Content
+              <FaFileAlt />
+              <span>Content</span>
             </button>
+            
             <button 
-              className={`nav-tab ${activeTab === 'analytics' ? 'active' : ''}`}
+              className={`admin-nav-item ${activeTab === 'media' ? 'active' : ''}`}
+              onClick={() => setActiveTab('media')}
+            >
+              <FaVideo />
+              <span>Media</span>
+            </button>
+            
+            <button 
+              className={`admin-nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
               onClick={() => setActiveTab('analytics')}
             >
-              📈 Analytics
+              <FaChartBar />
+              <span>Analytics</span>
             </button>
+            
+            <button 
+              className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              <FaCog />
+              <span>Settings</span>
+            </button>
+          </nav>
+          
+          <div className="sidebar-footer">
+            <Link to="/" className="admin-logout-btn">
+              <FaSignOutAlt />
+              <span>Logout</span>
+            </Link>
           </div>
-        </div>
-      </div>
+        </aside>
 
-      {/* Dashboard Content */}
-      <div className="admin-content">
-        <div className="container">
+        {/* Main Content Area */}
+        <main className="admin-main">
           {activeTab === 'overview' && (
-            <div className="overview-tab">
-              {/* Stats Cards */}
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Dashboard Overview</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaPlus />
+                    Quick Add
+                  </button>
+                  <button className="btn-secondary">
+                    <FaDownload />
+                    Export Data
+                  </button>
+                </div>
+              </div>
+
+              {/* Modern Stats Grid */}
               <div className="stats-grid">
-                <div className="stat-card">
-                  <div className="stat-icon">👥</div>
-                  <div className="stat-info">
-                    <h3>{stats.totalStudents}</h3>
-                    <p>Total Students</p>
+                <div className="stat-card primary">
+                  <div className="stat-icon">
+                    <FaUsers />
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">{stats.students}</div>
+                    <div className="stat-label">Total Students</div>
+                    <div className="stat-change positive">
+                      <FaArrowUp />
+                      +12 this week
+                    </div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">👨‍🏫</div>
-                  <div className="stat-info">
-                    <h3>{stats.totalTeachers}</h3>
-                    <p>Total Teachers</p>
+                
+                <div className="stat-card success">
+                  <div className="stat-icon">
+                    <FaChalkboardTeacher />
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">{stats.teachers}</div>
+                    <div className="stat-label">Active Teachers</div>
+                    <div className="stat-change positive">
+                      <FaArrowUp />
+                      +3 this month
+                    </div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">🎓</div>
-                  <div className="stat-info">
-                    <h3>{stats.activeClasses}</h3>
-                    <p>Active Classes</p>
+                
+                <div className="stat-card warning">
+                  <div className="stat-icon">
+                    <FaBook />
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">{stats.classes}</div>
+                    <div className="stat-label">Active Classes</div>
+                    <div className="stat-change neutral">
+                      <FaMinus />
+                      No change
+                    </div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">⏳</div>
-                  <div className="stat-info">
-                    <h3>{stats.pendingApprovals}</h3>
-                    <p>Pending Approvals</p>
+                
+                <div className="stat-card info">
+                  <div className="stat-icon">
+                    <FaClipboardList />
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">{stats.courses}</div>
+                    <div className="stat-label">Total Courses</div>
+                    <div className="stat-change positive">
+                      <FaArrowUp />
+                      +2 new
+                    </div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">📝</div>
-                  <div className="stat-info">
-                    <h3>{stats.newRegistrations}</h3>
-                    <p>New Registrations</p>
+                
+                <div className="stat-card danger">
+                  <div className="stat-icon">
+                    <FaTasks />
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">{stats.pending}</div>
+                    <div className="stat-label">Pending Approvals</div>
+                    <div className="stat-change negative">
+                      <FaExclamationTriangle />
+                      Requires attention
+                    </div>
                   </div>
                 </div>
-                <div className="stat-card">
-                  <div className="stat-icon">⚠️</div>
-                  <div className="stat-info">
-                    <h3>{stats.systemAlerts}</h3>
-                    <p>System Alerts</p>
+                
+                <div className="stat-card secondary">
+                  <div className="stat-icon">
+                    <FaTrophy />
+                  </div>
+                  <div className="stat-content">
+                    <div className="stat-number">${stats.revenue.toLocaleString()}</div>
+                    <div className="stat-label">Revenue</div>
+                    <div className="stat-change positive">
+                      <FaArrowUp />
+                      +{stats.growth}%
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Recent Activity */}
-              <div className="recent-activity">
-                <h2>Recent Activity</h2>
-                <div className="activity-list">
-                  <div className="activity-item">
-                    <div className="activity-icon">👤</div>
-                    <div className="activity-text">
-                      <p>New student registration: John Smith</p>
-                      <span>2 hours ago</span>
+              {/* Dashboard Content */}
+              <div className="dashboard-content">
+                <div className="content-grid">
+                  <div className="content-card">
+                    <div className="card-header">
+                      <h3>Recent Activity</h3>
+                      <button className="btn-text">View All</button>
                     </div>
-                    <button className="action-btn">Review</button>
-                  </div>
-                  <div className="activity-item">
-                    <div className="activity-icon">📚</div>
-                    <div className="activity-text">
-                      <p>New lesson uploaded: Advanced Calculus</p>
-                      <span>4 hours ago</span>
+                    <div className="activity-list">
+                      {recentActivity.map(activity => (
+                        <div key={activity.id} className="activity-item">
+                          <div className="activity-avatar">
+                            {activity.avatar}
+                          </div>
+                          <div className="activity-content">
+                            <p className="activity-message">{activity.message}</p>
+                            <div className="activity-meta">
+                              <span className="activity-time">{activity.time}</span>
+                              <span className={`activity-status ${activity.status}`}>
+                                {activity.status === 'pending' ? <FaClock /> : <FaCheckCircle />}
+                                {activity.status}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="activity-actions">
+                            <button className="btn-small">
+                              {activity.status === 'pending' ? 'Review' : 'View'}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <button className="action-btn">View</button>
                   </div>
-                  <div className="activity-item">
-                    <div className="activity-icon">✅</div>
-                    <div className="activity-text">
-                      <p>Teacher application approved: Dr. Lisa Johnson</p>
-                      <span>6 hours ago</span>
-                    </div>
-                    <button className="action-btn">Details</button>
-                  </div>
-                </div>
-              </div>
 
-              {/* System Alerts */}
-              <div className="system-alerts">
-                <h2>System Alerts</h2>
-                <div className="alerts-list">
-                  {systemAlerts.map(alert => (
-                    <div key={alert.id} className={`alert-item ${alert.type}`}>
-                      <div className="alert-icon">
-                        {alert.type === 'warning' ? '⚠️' : alert.type === 'info' ? 'ℹ️' : '✅'}
-                      </div>
-                      <div className="alert-content">
-                        <p>{alert.message}</p>
-                        <span>{alert.time}</span>
-                      </div>
-                      <button className="alert-action">Dismiss</button>
+                  <div className="content-card">
+                    <div className="card-header">
+                      <h3>System Alerts</h3>
+                      <button className="btn-text">Manage</button>
                     </div>
-                  ))}
+                    <div className="alerts-list">
+                      {systemAlerts.map(alert => (
+                        <div key={alert.id} className={`alert-item ${alert.type}`}>
+                          <div className="alert-icon">
+                            <alert.icon />
+                          </div>
+                          <div className="alert-content">
+                            <p className="alert-message">{alert.message}</p>
+                            <span className="alert-time">{alert.time}</span>
+                          </div>
+                          {alert.action && (
+                            <button className="btn-small">
+                              {alert.action}
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="content-card">
+                    <div className="card-header">
+                      <h3>Top Students</h3>
+                      <button className="btn-text">View All</button>
+                    </div>
+                    <div className="top-students-list">
+                      {topStudents.map((student, index) => (
+                        <div key={index} className="student-item">
+                          <div className="student-rank">
+                            <FaTrophy className={index < 3 ? 'trophy' : ''} />
+                            {index + 1}
+                          </div>
+                          <div className="student-info">
+                            <h4>{student.name}</h4>
+                            <p>{student.grade} - {student.subject}</p>
+                          </div>
+                          <div className="student-score">
+                            <span className="score">{student.score}%</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="content-card">
+                    <div className="card-header">
+                      <h3>Upcoming Events</h3>
+                      <button className="btn-text">View Calendar</button>
+                    </div>
+                    <div className="events-list">
+                      {upcomingEvents.map((event, index) => (
+                        <div key={index} className="event-item">
+                          <div className="event-icon">
+                            <FaCalendarAlt />
+                          </div>
+                          <div className="event-content">
+                            <h4>{event.title}</h4>
+                            <p>{event.date} at {event.time}</p>
+                          </div>
+                          <div className="event-type">
+                            <span className={`type-badge ${event.type}`}>{event.type}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
+          {/* Students Tab */}
           {activeTab === 'students' && (
-            <div className="students-tab">
-              <div className="tab-header">
+            <div className="admin-section">
+              <div className="section-header">
                 <h2>Student Management</h2>
-                <div className="tab-actions">
-                  <button className="btn-primary">Add Student</button>
-                  <button className="btn-secondary">Export Data</button>
-                  <button className="btn-outline">Bulk Actions</button>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaPlus />
+                    Add Student
+                  </button>
+                  <button className="btn-secondary">
+                    <FaUpload />
+                    Import Students
+                  </button>
+                  <button className="btn-outline">
+                    <FaDownload />
+                    Export Data
+                  </button>
                 </div>
               </div>
               
-              <div className="students-table">
-                <div className="table-header">
-                  <div>Name</div>
-                  <div>Grade</div>
-                  <div>Program</div>
-                  <div>Registration Date</div>
-                  <div>Status</div>
-                  <div>Actions</div>
+              <div className="content-card">
+                <div className="card-header">
+                  <h3>All Students</h3>
+                  <div className="card-filters">
+                    <div className="search-box">
+                      <FaSearch />
+                      <input type="text" placeholder="Search students..." />
+                    </div>
+                    <button className="btn-outline">
+                      <FaFilter />
+                      Filter
+                    </button>
+                    <button className="btn-outline">
+                      <FaSort />
+                      Sort
+                    </button>
+                  </div>
                 </div>
-                {recentRegistrations.map(student => (
-                  <div key={student.id} className="table-row">
-                    <div>{student.name}</div>
-                    <div>{student.grade}</div>
-                    <div>{student.program}</div>
-                    <div>{student.date}</div>
-                    <div className={`status ${student.status}`}>{student.status}</div>
-                    <div className="actions">
-                      <button className="edit-btn">Edit</button>
-                      <button className="view-btn">View</button>
-                      <button className="delete-btn">Delete</button>
+                <div className="table-container">
+                  <div className="modern-table">
+                    <div className="table-header">
+                      <div className="table-cell">Student</div>
+                      <div className="table-cell">Grade</div>
+                      <div className="table-cell">Program</div>
+                      <div className="table-cell">Status</div>
+                      <div className="table-cell">Last Active</div>
+                      <div className="table-cell">Actions</div>
+                    </div>
+                    <div className="table-body">
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <div className="student-info">
+                            <div className="student-avatar">JS</div>
+                            <div>
+                              <h4>John Smith</h4>
+                              <p>john.smith@email.com</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="table-cell">Grade 9</div>
+                        <div className="table-cell">High School Advanced</div>
+                        <div className="table-cell">
+                          <span className="status-badge active">Active</span>
+                        </div>
+                        <div className="table-cell">2 hours ago</div>
+                        <div className="table-cell">
+                          <div className="action-buttons">
+                            <button className="btn-icon" title="View">
+                              <FaEye />
+                            </button>
+                            <button className="btn-icon" title="Edit">
+                              <FaEdit />
+                            </button>
+                            <button className="btn-icon danger" title="Delete">
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           )}
 
-          {activeTab === 'approvals' && (
-            <div className="approvals-tab">
-              <h2>Pending Approvals</h2>
-              <div className="approvals-grid">
-                {pendingApprovals.map(approval => (
-                  <div key={approval.id} className="approval-card">
-                    <div className="approval-header">
-                      <h3>{approval.type}</h3>
-                      <span className={`priority ${approval.priority}`}>{approval.priority}</span>
+          {/* Teachers Tab */}
+          {activeTab === 'teachers' && (
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Teacher Management</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaPlus />
+                    Add Teacher
+                  </button>
+                  <button className="btn-secondary">
+                    <FaCalendarAlt />
+                    Schedule
+                  </button>
+                </div>
+              </div>
+              
+              <div className="content-card">
+                <div className="card-header">
+                  <h3>All Teachers</h3>
+                  <div className="card-filters">
+                    <div className="search-box">
+                      <FaSearch />
+                      <input type="text" placeholder="Search teachers..." />
                     </div>
-                    <div className="approval-content">
-                      <h4>{approval.name}</h4>
-                      <p>{approval.details}</p>
-                    </div>
-                    <div className="approval-actions">
-                      <button 
-                        className="approve-btn"
-                        onClick={() => handleApprove(approval.id)}
-                      >
-                        Approve
-                      </button>
-                      <button 
-                        className="reject-btn"
-                        onClick={() => handleReject(approval.id)}
-                      >
-                        Reject
-                      </button>
-                      <button className="view-btn">View Details</button>
-                    </div>
+                    <button className="btn-outline">
+                      <FaFilter />
+                      Filter
+                    </button>
                   </div>
-                ))}
+                </div>
+                <div className="table-container">
+                  <p className="empty-state">Teacher management interface will be implemented here.</p>
+                </div>
               </div>
             </div>
           )}
 
-          {activeTab === 'classes' && (
-            <div className="classes-tab">
-              <h2>Class Management</h2>
-              <div className="classes-grid">
-                {classes.map(classItem => (
-                  <div key={classItem.id} className="class-card">
-                    <div className="class-header">
-                      <h3>{classItem.name}</h3>
-                      <span className={`class-status ${classItem.status}`}>{classItem.status}</span>
+          {/* Courses Tab */}
+          {activeTab === 'courses' && (
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Course Management</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaPlus />
+                    Create Course
+                  </button>
+                  <button className="btn-secondary">
+                    <FaBookOpen />
+                    Curriculum
+                  </button>
+                </div>
+              </div>
+              
+              <div className="content-card">
+                <div className="card-header">
+                  <h3>All Courses</h3>
+                  <div className="card-filters">
+                    <div className="search-box">
+                      <FaSearch />
+                      <input type="text" placeholder="Search courses..." />
                     </div>
-                    <div className="class-details">
-                      <p>👨‍🏫 {classItem.teacher}</p>
-                      <p>👥 {classItem.students} students</p>
-                      <p>⏰ Next: {classItem.nextClass}</p>
-                    </div>
-                    <div className="class-actions">
-                      <button className="edit-btn">Edit Class</button>
-                      <button className="view-btn">View Students</button>
-                      <button className="schedule-btn">Schedule</button>
-                    </div>
+                    <button className="btn-outline">
+                      <FaFilter />
+                      Filter
+                    </button>
                   </div>
-                ))}
+                </div>
+                <div className="table-container">
+                  <p className="empty-state">Course management interface will be implemented here.</p>
+                </div>
               </div>
             </div>
           )}
 
+          {/* Assignments Tab */}
+          {activeTab === 'assignments' && (
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Assignment Management</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaPlus />
+                    Create Assignment
+                  </button>
+                  <button className="btn-secondary">
+                    <FaTasks />
+                    Bulk Actions
+                  </button>
+                </div>
+              </div>
+              
+              <div className="content-card">
+                <div className="card-header">
+                  <h3>All Assignments</h3>
+                  <div className="card-filters">
+                    <div className="search-box">
+                      <FaSearch />
+                      <input type="text" placeholder="Search assignments..." />
+                    </div>
+                    <button className="btn-outline">
+                      <FaFilter />
+                      Filter
+                    </button>
+                  </div>
+                </div>
+                <div className="table-container">
+                  <p className="empty-state">Assignment management interface will be implemented here.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Content Tab */}
           {activeTab === 'content' && (
-            <div className="content-tab">
-              <h2>Content Management</h2>
-              <div className="content-actions">
-                <button className="btn-primary">Upload New Lesson</button>
-                <button className="btn-secondary">Create Assignment</button>
-                <button className="btn-outline">Manage Resources</button>
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Content Management</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaPlus />
+                    Add Content
+                  </button>
+                  <button className="btn-secondary">
+                    <FaFileAlt />
+                    Templates
+                  </button>
+                </div>
               </div>
               
-              <div className="content-upload">
-                <h3>Upload New Content</h3>
-                <div className="upload-area">
-                  <div className="upload-icon">📁</div>
-                  <p>Drag and drop files here or click to browse</p>
-                  <button className="upload-btn">Choose Files</button>
+              <div className="content-grid">
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>Lessons</h3>
+                    <button className="btn-text">View All</button>
+                  </div>
+                  <p className="empty-state">Lesson management interface will be implemented here.</p>
+                </div>
+                
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>Resources</h3>
+                    <button className="btn-text">View All</button>
+                  </div>
+                  <p className="empty-state">Resource management interface will be implemented here.</p>
                 </div>
               </div>
             </div>
           )}
 
+          {/* Media Tab */}
+          {activeTab === 'media' && (
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Media Management</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaUpload />
+                    Upload Media
+                  </button>
+                  <button className="btn-secondary">
+                    <FaImage />
+                    Gallery
+                  </button>
+                </div>
+              </div>
+              
+              <div className="content-card">
+                <div className="card-header">
+                  <h3>Media Library</h3>
+                  <div className="card-filters">
+                    <div className="search-box">
+                      <FaSearch />
+                      <input type="text" placeholder="Search media..." />
+                    </div>
+                    <button className="btn-outline">
+                      <FaFilter />
+                      Filter
+                    </button>
+                  </div>
+                </div>
+                <div className="media-grid">
+                  <p className="empty-state">Media management interface will be implemented here.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Analytics Tab */}
           {activeTab === 'analytics' && (
-            <div className="analytics-tab">
-              <h2>Analytics Dashboard</h2>
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Analytics Dashboard</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaDownload />
+                    Export Report
+                  </button>
+                </div>
+              </div>
+              
               <div className="analytics-grid">
-                <div className="chart-card">
-                  <h3>Student Enrollment Trends</h3>
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>Student Enrollment Trends</h3>
+                  </div>
                   <div className="chart-placeholder">
-                    <p>📊 Chart would be displayed here</p>
+                    <FaChartBar />
+                    <p>Chart would be displayed here</p>
                   </div>
                 </div>
-                <div className="chart-card">
-                  <h3>Class Performance</h3>
+                
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>Class Performance</h3>
+                  </div>
                   <div className="chart-placeholder">
-                    <p>📈 Performance metrics would be shown here</p>
+                    <FaTrophy />
+                    <p>Performance metrics would be shown here</p>
                   </div>
                 </div>
-                <div className="chart-card">
-                  <h3>Teacher Activity</h3>
+                
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>Teacher Activity</h3>
+                  </div>
                   <div className="chart-placeholder">
-                    <p>👨‍🏫 Teacher engagement data would be displayed here</p>
+                    <FaChalkboardTeacher />
+                    <p>Teacher engagement data would be displayed here</p>
                   </div>
                 </div>
               </div>
             </div>
           )}
-        </div>
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>System Settings</h2>
+                <div className="section-actions">
+                  <button className="btn-primary">
+                    <FaCog />
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+              
+              <div className="settings-grid">
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>General Settings</h3>
+                  </div>
+                  <p className="empty-state">General settings interface will be implemented here.</p>
+                </div>
+                
+                <div className="content-card">
+                  <div className="card-header">
+                    <h3>User Permissions</h3>
+                  </div>
+                  <p className="empty-state">Permission settings interface will be implemented here.</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
