@@ -5,33 +5,95 @@ import VideoPlayer from '../components/VideoPlayer';
 const HomePage = () => {
   return (
     <div className="home-page">
-      {/* Hero Banner */}
-      <section className="hero">
-        <div className="hero-content">
-          <h1 className="hero-title">E-Math-Sci School</h1>
-          <p className="hero-subtitle">Enhancing math and science lovers to high heights</p>
-          <p className="hero-description">
-            Empowering students with world-class education in mathematics and science through innovative teaching methods and cutting-edge technology.
-          </p>
-          <div className="hero-buttons">
-            <Link to="/register" className="btn-primary">Apply Now</Link>
-            <Link to="/programs" className="btn-secondary">Explore Programs</Link>
-            <Link to="/contact" className="btn-outline">Contact Us</Link>
+      {/* Video Hero Banner */}
+      <section className="video-hero">
+        <div className="hero-video-container">
+          <video 
+            className="hero-video" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+          >
+            <source src="/video1.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
+            <div className="hero-text">
+              <h1 className="hero-title">E-School</h1>
+              <p className="hero-subtitle">Where Math & Science Come Alive!</p>
+              <p className="hero-description">
+                Join thousands of students who are transforming their futures through our innovative learning approach.
+              </p>
+              <div className="hero-buttons">
+                <Link to="/register" className="btn-hero-primary">🚀 Start Your Journey</Link>
+                <Link to="/programs" className="btn-hero-secondary">📚 Explore Programs</Link>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="hero-image">
-          <div className="hero-visual">
-            <div className="floating-card">
-              <h3>🎓 500+ Students</h3>
-              <p>Successfully graduated</p>
+      </section>
+
+      {/* Creative Image Showcase */}
+      <section className="image-showcase">
+        <div className="container">
+          <h2 className="section-title">Experience Learning Like Never Before</h2>
+          <div className="showcase-grid">
+            <div className="showcase-item showcase-large">
+              <img src="/image1.jpeg" alt="Interactive Learning" className="showcase-img" />
+              <div className="showcase-overlay">
+                <h3>Interactive Learning</h3>
+                <p>Hands-on experiments and real-world applications</p>
+                <Link to="/programs" className="showcase-btn">Explore Programs</Link>
+              </div>
             </div>
-            <div className="floating-card">
-              <h3>👨‍🏫 50+ Teachers</h3>
-              <p>Expert educators</p>
+            <div className="showcase-item">
+              <div className="video-showcase">
+                <video className="showcase-video" controls>
+                  <source src="/math.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="video-overlay">
+                  <h3>Mathematics Excellence</h3>
+                  <p>Master math concepts with our expert teachers</p>
+                  <Link to="/programs" className="showcase-btn">Learn Math</Link>
+                </div>
+              </div>
             </div>
-            <div className="floating-card">
-              <h3>📚 100+ Courses</h3>
-              <p>Comprehensive curriculum</p>
+            <div className="showcase-item">
+              <div className="video-showcase">
+                <video className="showcase-video" controls>
+                  <source src="/science.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="video-overlay">
+                  <h3>Science Discovery</h3>
+                  <p>Explore the wonders of science through experiments</p>
+                  <Link to="/programs" className="showcase-btn">Explore Science</Link>
+                </div>
+              </div>
+            </div>
+            <div className="showcase-item">
+              <img src="/image2.jpg" alt="Student Success" className="showcase-img" />
+              <div className="showcase-overlay">
+                <h3>Student Success</h3>
+                <p>Join our community of achievers</p>
+                <Link to="/testimonials" className="showcase-btn">Read Success Stories</Link>
+              </div>
+            </div>
+            <div className="showcase-item">
+              <div className="video-showcase">
+                <video className="showcase-video" controls>
+                  <source src="/video2.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div className="video-overlay">
+                  <h3>See Us In Action</h3>
+                  <p>Watch our students learn and grow</p>
+                  <Link to="/gallery" className="showcase-btn">View Gallery</Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -43,22 +105,36 @@ const HomePage = () => {
           <h2 className="section-title">Get Started Today</h2>
           <div className="quick-links-grid">
             <Link to="/register" className="quick-link-card">
-              <div className="icon">📝</div>
-              <h3>Apply Now</h3>
-              <p>Start your learning journey with us</p>
+              <div className="card-image">
+                <img src="/image1.jpeg" alt="Start Learning" className="card-img" />
+                <div className="card-overlay">
+                  <span className="play-icon">▶️</span>
+                </div>
+              </div>
+              <h3>Start Learning</h3>
+              <p>Begin your educational journey with us</p>
             </Link>
             <Link to="/programs" className="quick-link-card">
-              <div className="icon">🎓</div>
-              <h3>Explore Programs</h3>
-              <p>Discover our amazing courses</p>
+              <div className="card-image">
+                <img src="/image2.jpg" alt="View Programs" className="card-img" />
+                <div className="card-overlay">
+                  <span className="play-icon">▶️</span>
+                </div>
+              </div>
+              <h3>View Programs</h3>
+              <p>Discover our comprehensive curriculum</p>
             </Link>
             <Link to="/contact" className="quick-link-card">
-              <div className="icon">📞</div>
-              <h3>Contact Us</h3>
-              <p>Get in touch with our team</p>
+              <div className="card-image">
+                <div className="contact-icon">📞</div>
+              </div>
+              <h3>Get Help</h3>
+              <p>Contact our support team</p>
             </Link>
             <Link to="/portal" className="quick-link-card">
-              <div className="icon">💻</div>
+              <div className="card-image">
+                <div className="portal-icon">💻</div>
+              </div>
               <h3>Student Portal</h3>
               <p>Access your learning resources</p>
             </Link>
@@ -95,29 +171,49 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured Video */}
-      <section className="featured-video">
+      {/* See Our School in Action */}
+      <section className="school-action">
         <div className="container">
           <h2 className="section-title">See Our School in Action</h2>
-          <div className="video-grid">
-            <VideoPlayer
-              title="Welcome to E-Math-Sci School"
-              description="Take a virtual tour of our amazing facilities and see how we're transforming education!"
-              duration="3:45"
-              className="featured-video-player"
-            />
-            <VideoPlayer
-              title="Student Success Stories"
-              description="Hear from our students about their amazing learning journey with us!"
-              duration="2:30"
-              className="success-video-player"
-            />
-            <VideoPlayer
-              title="Interactive Math Lessons"
-              description="See how we make math fun and engaging for students of all ages!"
-              duration="4:15"
-              className="math-video-player"
-            />
+          <div className="action-videos-grid">
+            <div className="action-video-card">
+              <div className="video-player-container">
+                <video className="action-video" controls>
+                  <source src="/video1.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <div className="video-info">
+                <h3>Welcome to E-School</h3>
+                <p>Take a virtual tour of our amazing facilities and see how we're transforming education!</p>
+              </div>
+            </div>
+            
+            <div className="action-video-card">
+              <div className="video-player-container">
+                <video className="action-video" controls>
+                  <source src="/video2.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <div className="video-info">
+                <h3>Student Success Stories</h3>
+                <p>Hear from our students about their amazing learning journey with us!</p>
+              </div>
+            </div>
+            
+            <div className="action-video-card">
+              <div className="video-player-container">
+                <video className="action-video" controls>
+                  <source src="/math.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <div className="video-info">
+                <h3>Interactive Math Lessons</h3>
+                <p>See how we make math fun and engaging for students of all ages!</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

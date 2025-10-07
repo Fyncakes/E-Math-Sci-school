@@ -1,110 +1,112 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
+import PDFViewer from '../components/PDFViewer';
 import { lessons } from '../data/lessons';
 
 const ProgramsPage = () => {
   const [activeTab, setActiveTab] = useState('in-person');
   const [selectedSubject, setSelectedSubject] = useState('all');
+  const [selectedPDF, setSelectedPDF] = useState(null);
 
   const programs = {
     'in-person': [
       {
         id: 1,
-        title: 'Elementary Math & Science',
-        grade: 'Grades 1-5',
+        title: 'Mathematics Program',
+        grade: 'All Grades',
         duration: 'Full Academic Year',
         price: '$500/month',
         features: [
-          'Basic arithmetic and problem-solving',
-          'Introduction to scientific concepts',
-          'Hands-on experiments and activities',
-          'Interactive learning games',
-          'Progress tracking and reports'
+          'Comprehensive math curriculum aligned with national standards',
+          'Vertical alignment from elementary to high school',
+          'Problem-solving and critical thinking development',
+          'Individual and group learning activities',
+          'Progress tracking and assessment'
         ],
-        description: 'Our elementary program introduces young learners to the fascinating world of mathematics and science through fun, interactive activities and hands-on experiments.',
-        video: '🎥 Elementary Program Demo',
+        description: 'Our mathematics program follows a vertically aligned curriculum that builds mathematical understanding progressively from basic concepts to advanced applications.',
+        curriculum: '/curriculum/Copy of Maths Vertical Alignment_.pdf',
         schedule: 'Monday-Friday, 9:00 AM - 3:00 PM',
-        capacity: '20 students per class',
-        teacher: 'Ms. Sarah Johnson'
+        capacity: '25 students per class',
+        teacher: 'Mathematics Department'
       },
       {
         id: 2,
-        title: 'Middle School STEM',
-        grade: 'Grades 6-8',
+        title: 'Sciences Program',
+        grade: 'All Grades',
         duration: 'Full Academic Year',
-        price: '$600/month',
+        price: '$550/month',
         features: [
-          'Advanced mathematics concepts',
-          'Physics and chemistry fundamentals',
-          'Engineering design projects',
-          'Coding and robotics',
-          'Science fair preparation'
+          'Integrated science curriculum covering all disciplines',
+          'Hands-on laboratory experiences',
+          'Scientific method and inquiry-based learning',
+          'Real-world applications and connections',
+          'STEM project development'
         ],
-        description: 'Designed to build strong foundations in STEM subjects while encouraging critical thinking and problem-solving skills.',
-        video: '🎥 Middle School STEM Demo',
+        description: 'Our comprehensive sciences program provides students with a deep understanding of scientific principles through inquiry-based learning and practical applications.',
+        curriculum: '/curriculum/Sciences Vertical Alignment_.pdf',
         schedule: 'Monday-Friday, 8:30 AM - 3:30 PM',
-        capacity: '25 students per class',
-        teacher: 'Dr. Michael Chen'
+        capacity: '20 students per class',
+        teacher: 'Sciences Department'
       },
       {
         id: 3,
-        title: 'High School Advanced',
-        grade: 'Grades 9-12',
+        title: 'English Grammar Program',
+        grade: 'All Grades',
         duration: 'Full Academic Year',
-        price: '$700/month',
+        price: '$450/month',
         features: [
-          'Calculus and advanced mathematics',
-          'Advanced physics and chemistry',
-          'Research project opportunities',
-          'College preparation courses',
-          'Mentorship programs'
+          'Structured grammar instruction across all grade levels',
+          'Writing skills development and enhancement',
+          'Reading comprehension and analysis',
+          'Communication and presentation skills',
+          'Language arts integration'
         ],
-        description: 'Prepare for college and beyond with our comprehensive high school program that covers advanced topics and research opportunities.',
-        video: '🎥 High School Advanced Demo',
+        description: 'Our English Grammar program provides systematic instruction in language arts, helping students develop strong communication skills and literary appreciation.',
+        curriculum: '/curriculum/English_Grammar Vertical Alignment_.pdf',
         schedule: 'Monday-Friday, 8:00 AM - 4:00 PM',
         capacity: '30 students per class',
-        teacher: 'Prof. Emily Williams'
+        teacher: 'English Department'
       }
     ],
     'online': [
       {
         id: 4,
-        title: 'Online Math Mastery',
+        title: 'Online Mathematics Support',
         grade: 'All Grades',
         duration: 'Flexible Schedule',
         price: '$300/month',
         features: [
-          'Self-paced learning modules',
-          'Interactive video lessons',
-          'Live online tutoring sessions',
-          'Digital practice exercises',
-          'Progress analytics dashboard'
+          'Access to complete math curriculum online',
+          'Interactive problem-solving sessions',
+          'Virtual tutoring and support',
+          'Digital practice exercises and assessments',
+          'Progress tracking and analytics'
         ],
-        description: 'Learn mathematics at your own pace with our comprehensive online platform featuring interactive lessons and personalized support.',
-        video: '🎥 Online Math Demo',
+        description: 'Supplement your in-person learning with our comprehensive online mathematics support program, available 24/7.',
+        curriculum: '/curriculum/Copy of Maths Vertical Alignment_.pdf',
         schedule: 'Flexible - Access 24/7',
         capacity: 'Unlimited',
-        teacher: 'AI + Live Instructors'
+        teacher: 'Online Mathematics Team'
       },
       {
         id: 5,
         title: 'Virtual Science Lab',
-        grade: 'Grades 6-12',
+        grade: 'All Grades',
         duration: 'Flexible Schedule',
         price: '$350/month',
         features: [
           'Virtual laboratory simulations',
           'Interactive science experiments',
-          'Live lab sessions with teachers',
-          'Digital lab reports',
-          'Science project guidance'
+          'Online science curriculum access',
+          'Digital lab reports and assessments',
+          'Science project guidance and support'
         ],
         description: 'Experience the excitement of science through our virtual laboratory platform with realistic simulations and hands-on activities.',
-        video: '🎥 Virtual Science Lab Demo',
+        curriculum: '/curriculum/Sciences Vertical Alignment_.pdf',
         schedule: 'Flexible - Access 24/7',
         capacity: 'Unlimited',
-        teacher: 'Dr. Lisa Rodriguez'
+        teacher: 'Virtual Sciences Team'
       }
     ]
   };
@@ -198,7 +200,15 @@ const ProgramsPage = () => {
                   <div className="price">{program.price}</div>
                   <div className="program-actions">
                     <Link to="/register" className="btn-primary">Enroll Now</Link>
-                    <button className="btn-outline">Learn More</button>
+                    <button 
+                      className="btn-outline"
+                      onClick={() => setSelectedPDF({
+                        url: program.curriculum,
+                        title: `${program.title} Curriculum`
+                      })}
+                    >
+                      📄 View Curriculum
+                    </button>
                   </div>
                 </div>
               </div>
@@ -207,118 +217,34 @@ const ProgramsPage = () => {
         </div>
       </section>
 
-      {/* Sample Lessons */}
-      <section className="sample-lessons">
-        <div className="container">
-          <h2 className="section-title">Sample Lessons</h2>
-          
-          <div className="lesson-filters">
-            <button 
-              className={`filter-btn ${selectedSubject === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedSubject('all')}
-            >
-              All Subjects
-            </button>
-            <button 
-              className={`filter-btn ${selectedSubject === 'mathematics' ? 'active' : ''}`}
-              onClick={() => setSelectedSubject('mathematics')}
-            >
-              Mathematics
-            </button>
-            <button 
-              className={`filter-btn ${selectedSubject === 'science' ? 'active' : ''}`}
-              onClick={() => setSelectedSubject('science')}
-            >
-              Science
-            </button>
-            <button 
-              className={`filter-btn ${selectedSubject === 'physics' ? 'active' : ''}`}
-              onClick={() => setSelectedSubject('physics')}
-            >
-              Physics
-            </button>
-            <button 
-              className={`filter-btn ${selectedSubject === 'chemistry' ? 'active' : ''}`}
-              onClick={() => setSelectedSubject('chemistry')}
-            >
-              Chemistry
-            </button>
-          </div>
-          
-          <div className="lessons-grid">
-            {filteredLessons.map(lesson => (
-              <div key={lesson.id} className="lesson-card">
-                <div className="lesson-header">
-                  <h3>{lesson.title}</h3>
-                  <div className="lesson-meta">
-                    <span className="subject">{lesson.subject}</span>
-                    <span className="grade">{lesson.grade}</span>
-                    <span className="difficulty">{lesson.difficulty}</span>
-                  </div>
+          {/* Curriculum Overview */}
+          <section className="curriculum-overview">
+            <div className="container">
+              <h2 className="section-title">Our Teaching Approach</h2>
+              <div className="curriculum-grid">
+                <div className="curriculum-card">
+                  <div className="curriculum-icon">🎯</div>
+                  <h3>Personalized Learning</h3>
+                  <p>Each student receives individualized attention and learning plans tailored to their unique needs and learning style.</p>
                 </div>
-                
-                <div className="lesson-content">
-                  <p className="lesson-description">{lesson.description}</p>
-                  
-                  <div className="lesson-objectives">
-                    <h4>Learning Objectives:</h4>
-                    <ul>
-                      {lesson.objectives.slice(0, 3).map((objective, index) => (
-                        <li key={index}>{objective}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="lesson-details">
-                    <div className="detail">
-                      <span className="icon">⏱️</span>
-                      <span>{lesson.duration}</span>
-                    </div>
-                    <div className="detail">
-                      <span className="icon">📚</span>
-                      <span>{lesson.subject}</span>
-                    </div>
-                  </div>
+                <div className="curriculum-card">
+                  <div className="curriculum-icon">🤝</div>
+                  <h3>Collaborative Learning</h3>
+                  <p>Students work together on projects and problem-solving activities to develop teamwork and communication skills.</p>
                 </div>
-                
-                <div className="lesson-actions">
-                  <button className="btn-primary">View Lesson</button>
-                  <button className="btn-outline">Preview</button>
+                <div className="curriculum-card">
+                  <div className="curriculum-icon">🔬</div>
+                  <h3>Hands-on Experience</h3>
+                  <p>Learning through experimentation and real-world applications to make concepts more engaging and memorable.</p>
+                </div>
+                <div className="curriculum-card">
+                  <div className="curriculum-icon">📊</div>
+                  <h3>Progress Tracking</h3>
+                  <p>Regular assessments and progress reports to ensure students are meeting their learning goals.</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Curriculum Overview */}
-      <section className="curriculum-overview">
-        <div className="container">
-          <h2 className="section-title">Our Teaching Approach</h2>
-          <div className="curriculum-grid">
-            <div className="curriculum-card">
-              <div className="curriculum-icon">🎯</div>
-              <h3>Personalized Learning</h3>
-              <p>Each student receives individualized attention and learning plans tailored to their unique needs and learning style.</p>
             </div>
-            <div className="curriculum-card">
-              <div className="curriculum-icon">🤝</div>
-              <h3>Collaborative Learning</h3>
-              <p>Students work together on projects and problem-solving activities to develop teamwork and communication skills.</p>
-            </div>
-            <div className="curriculum-card">
-              <div className="curriculum-icon">🔬</div>
-              <h3>Hands-on Experience</h3>
-              <p>Learning through experimentation and real-world applications to make concepts more engaging and memorable.</p>
-            </div>
-            <div className="curriculum-card">
-              <div className="curriculum-icon">📊</div>
-              <h3>Progress Tracking</h3>
-              <p>Regular assessments and progress reports to ensure students are meeting their learning goals.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
       {/* Call to Action */}
       <section className="cta-section">
@@ -333,6 +259,15 @@ const ProgramsPage = () => {
           </div>
         </div>
       </section>
+
+      {/* PDF Viewer Modal */}
+      {selectedPDF && (
+        <PDFViewer
+          pdfUrl={selectedPDF.url}
+          title={selectedPDF.title}
+          onClose={() => setSelectedPDF(null)}
+        />
+      )}
     </div>
   );
 };

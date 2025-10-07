@@ -12,25 +12,12 @@ const Logo = ({ size = 'medium', showText = true, className = '' }) => {
   return (
     <div className={`logo-container ${getSizeClass()} ${className}`}>
       <div className="logo-icon">
-        <div className="stars-container">
-          <span className="star star-1">⭐</span>
-          <span className="star star-2">✨</span>
-          <span className="star star-3">🌟</span>
-          <span className="star star-4">💫</span>
-        </div>
-        <div className="graduation-cap">🎓</div>
-        <div className="math-symbols">
-          <span className="symbol">+</span>
-          <span className="symbol">×</span>
-          <span className="symbol">÷</span>
-        </div>
+        <img 
+          src="/logo.png" 
+          alt="E-School Logo" 
+          className="logo-image"
+        />
       </div>
-      {showText && (
-        <div className="logo-text">
-          <h2 className="school-name">E-School</h2>
-          <span className="tagline">Learning Hub</span>
-        </div>
-      )}
     </div>
   );
 };

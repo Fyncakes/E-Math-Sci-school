@@ -1,67 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 const Navbar = ({ isMenuOpen, toggleMenu }) => {
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+
   return (
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          <Logo size="medium" />
+          <Logo size="medium" showText={false} />
         </Link>
         
         <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <div className="nav-links">
             <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">🏠</span>
-              <span>Home</span>
-            </Link>
-            <Link to="/about" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">ℹ️</span>
-              <span>About Us</span>
+              Home
             </Link>
             <Link to="/programs" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">🎓</span>
-              <span>Programs</span>
+              Programs
             </Link>
             <Link to="/admissions" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">📝</span>
-              <span>Admissions</span>
+              Admissions
             </Link>
             <Link to="/portal" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">💻</span>
-              <span>Student Portal</span>
+              Student Portal
             </Link>
-            <Link to="/news" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">📰</span>
-              <span>News & Events</span>
-            </Link>
-            <Link to="/gallery" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">🖼️</span>
-              <span>Gallery</span>
-            </Link>
-            <Link to="/testimonials" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">💬</span>
-              <span>Testimonials</span>
-            </Link>
+            <div className="nav-dropdown">
+              <button 
+                className="nav-link dropdown-toggle" 
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+              >
+                More ▼
+              </button>
+              {showMoreMenu && (
+                <div className="dropdown-menu">
+                  <Link to="/about" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                    About Us
+                  </Link>
+                  <Link to="/news" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                    News & Events
+                  </Link>
+                  <Link to="/gallery" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                    Gallery
+                  </Link>
+                  <Link to="/testimonials" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                    Testimonials
+                  </Link>
+                </div>
+              )}
+            </div>
             <Link to="/contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>
-              <span className="nav-icon">📞</span>
-              <span>Contact</span>
+              Contact
             </Link>
           </div>
           
           <div className="nav-actions">
             <Link to="/register" className="apply-btn">
-              <span className="btn-icon">✨</span>
-              <span>Apply Now</span>
+              Apply Now
             </Link>
             <Link to="/login" className="login-btn">
-              <span className="btn-icon">🔑</span>
-              <span>Login</span>
+              Login
             </Link>
             <Link to="/admin" className="admin-btn">
-              <span className="btn-icon">⚙️</span>
-              <span>Admin</span>
+              Admin
             </Link>
           </div>
         </div>
