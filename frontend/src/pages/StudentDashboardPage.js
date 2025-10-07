@@ -7,7 +7,7 @@ import {
   FaCog, FaSignOutAlt, FaSearch, FaFilter, FaSort, FaPlus,
   FaEye, FaEdit, FaTrash, FaArrowUp, FaArrowDown, FaMinus,
   FaUsers, FaChalkboardTeacher, FaTasks, FaAward, FaMedal,
-  FaRocket, FaTarget, FaLightbulb, FaBookOpen, FaFilePdf,
+  FaRocket, FaBullseye, FaLightbulb, FaBookOpen, FaFilePdf,
   FaVideo as FaVideoIcon, FaImage, FaMusic, FaCode
 } from 'react-icons/fa';
 
@@ -277,7 +277,7 @@ const StudentDashboardPage = () => {
               <FaGraduationCap />
             </div>
             <div className="student-title">
-              <h1>E-School</h1>
+              <h1>G'SON INTERNATIONAL ACADEMY</h1>
               <span>Student Portal</span>
             </div>
           </div>

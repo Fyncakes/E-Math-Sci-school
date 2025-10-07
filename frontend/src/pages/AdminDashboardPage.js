@@ -566,10 +566,10 @@ const AdminDashboardPage = () => {
               <div className="section-header">
                 <h2>Teacher Management</h2>
                 <div className="section-actions">
-                  <button className="btn-primary">
+                  <Link to="/admin/add-teacher" className="btn-primary">
                     <FaPlus />
                     Add Teacher
-                  </button>
+                  </Link>
                   <button className="btn-secondary">
                     <FaCalendarAlt />
                     Schedule

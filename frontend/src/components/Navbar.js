@@ -4,6 +4,16 @@ import Logo from './Logo';
 
 const Navbar = ({ isMenuOpen, toggleMenu }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  
+  // Check if user is admin
+  const isAdmin = () => {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user.role === 'admin';
+    }
+    return false;
+  };
 
   return (
     <nav className="navbar">
@@ -14,17 +24,20 @@ const Navbar = ({ isMenuOpen, toggleMenu }) => {
         
         <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <div className="nav-links">
-            <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/" className="nav-link" onClick={toggleMenu}>
               Home
             </Link>
-            <Link to="/programs" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/programs" className="nav-link" onClick={toggleMenu}>
               Programs
             </Link>
-            <Link to="/admissions" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/admissions" className="nav-link" onClick={toggleMenu}>
               Admissions
             </Link>
-            <Link to="/portal" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/portal" className="nav-link" onClick={toggleMenu}>
               Student Portal
+            </Link>
+            <Link to="/teacher-login" className="nav-link" onClick={toggleMenu}>
+              Teacher Portal
             </Link>
             <div className="nav-dropdown">
               <button 
@@ -35,22 +48,22 @@ const Navbar = ({ isMenuOpen, toggleMenu }) => {
               </button>
               {showMoreMenu && (
                 <div className="dropdown-menu">
-                  <Link to="/about" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                  <Link to="/about" className="dropdown-link" onClick={() => { setShowMoreMenu(false); toggleMenu(); }}>
                     About Us
                   </Link>
-                  <Link to="/news" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                  <Link to="/news" className="dropdown-link" onClick={() => { setShowMoreMenu(false); toggleMenu(); }}>
                     News & Events
                   </Link>
-                  <Link to="/gallery" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                  <Link to="/gallery" className="dropdown-link" onClick={() => { setShowMoreMenu(false); toggleMenu(); }}>
                     Gallery
                   </Link>
-                  <Link to="/testimonials" className="dropdown-link" onClick={() => setIsMenuOpen(false)}>
+                  <Link to="/testimonials" className="dropdown-link" onClick={() => { setShowMoreMenu(false); toggleMenu(); }}>
                     Testimonials
                   </Link>
                 </div>
               )}
             </div>
-            <Link to="/contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>
+            <Link to="/contact" className="nav-link" onClick={toggleMenu}>
               Contact
             </Link>
           </div>
@@ -62,9 +75,11 @@ const Navbar = ({ isMenuOpen, toggleMenu }) => {
             <Link to="/login" className="login-btn">
               Login
             </Link>
-            <Link to="/admin" className="admin-btn">
-              Admin
-            </Link>
+            {isAdmin() && (
+              <Link to="/admin" className="admin-btn">
+                Admin
+              </Link>
+            )}
           </div>
         </div>
         

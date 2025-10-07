@@ -47,20 +47,35 @@ const StudentLoginPage = () => {
 
     try {
       // Simulate API call with better validation
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Store user data in localStorage for demo
-      const userData = {
-        id: 'student_' + Date.now(),
-        email: formData.email,
-        name: formData.email.split('@')[0],
-        role: 'student',
-        loginTime: new Date().toISOString()
-      };
-      localStorage.setItem('userData', JSON.stringify(userData));
-      localStorage.setItem('studentId', 'sarah'); // Default student profile
-      
-      navigate('/dashboard');
+      // API call to backend
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          role: 'student'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store student session
+        localStorage.setItem('userData', JSON.stringify(data.user));
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('studentId', data.user.id);
+        setSuccess('Login successful! Redirecting to dashboard...');
+        
+        // Redirect to student dashboard
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
+      } else {
+        setError(data.message || 'Invalid email or password. Please check your credentials.');
+      }
     } catch (err) {
       setError('Login failed. Please try again.');
     } finally {

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
+import FloatingMath from '../components/FloatingMath';
 
 const HomePage = () => {
   return (
     <div className="home-page">
+      <FloatingMath />
       {/* Video Hero Banner */}
       <section className="video-hero">
         <div className="hero-video-container">
@@ -21,14 +23,14 @@ const HomePage = () => {
           <div className="hero-overlay"></div>
           <div className="hero-content">
             <div className="hero-text">
-              <h1 className="hero-title">E-School</h1>
+              <h1 className="hero-title">G'SON INTERNATIONAL ACADEMY</h1>
               <p className="hero-subtitle">Where Math & Science Come Alive!</p>
               <p className="hero-description">
                 Join thousands of students who are transforming their futures through our innovative learning approach.
               </p>
               <div className="hero-buttons">
-                <Link to="/register" className="btn-hero-primary">🚀 Start Your Journey</Link>
-                <Link to="/programs" className="btn-hero-secondary">📚 Explore Programs</Link>
+                <Link to="/register" className="btn-hero-primary fun-button">🚀 Start Your Journey</Link>
+                <Link to="/programs" className="btn-hero-secondary fun-button">📚 Explore Programs</Link>
               </div>
             </div>
           </div>

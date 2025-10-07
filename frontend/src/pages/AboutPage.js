@@ -1,38 +1,127 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaGraduationCap, FaRocket, FaUsers, FaAward, FaBook, FaLightbulb, FaHeart, FaStar, FaTrophy, FaGlobe, FaHandshake, FaChartLine, FaBullseye } from 'react-icons/fa';
 
 const AboutPage = () => {
   return (
     <div className="about-page">
-      {/* Page Header */}
-      <section className="page-header">
+      {/* Hero Section */}
+      <section className="about-hero">
+        <div className="hero-background">
+          <div className="hero-overlay"></div>
+        </div>
         <div className="container">
-          <h1>About E-Math-Sci School</h1>
-          <p>Discover our story, mission, and the people who make our school special</p>
+          <div className="hero-content">
+            <div className="hero-badge">
+              <FaGraduationCap />
+              <span>Established 2020</span>
+            </div>
+            <h1>About G'SON INTERNATIONAL ACADEMY</h1>
+            <p className="hero-subtitle">
+              Empowering the next generation of innovators through exceptional mathematics and science education
+            </p>
+            <div className="hero-stats">
+              <div className="stat-item">
+                <div className="stat-number">2,500+</div>
+                <div className="stat-label">Students Taught</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">95%</div>
+                <div className="stat-label">Success Rate</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">50+</div>
+                <div className="stat-label">Expert Teachers</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-number">15</div>
+                <div className="stat-label">Years Experience</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Our Story */}
       <section className="our-story">
         <div className="container">
+          <div className="section-header">
+            <div className="section-badge">
+              <FaRocket />
+              <span>Our Journey</span>
+            </div>
+            <h2>Our Story</h2>
+            <p className="section-subtitle">
+              From a vision to reality - how we're transforming education
+            </p>
+          </div>
+          
           <div className="story-content">
             <div className="story-text">
-              <h2>Our Story</h2>
-              <p>
-                Founded in 2020, E-Math-Sci School was established with a vision to revolutionize mathematics and science education. 
-                We believe that every student has the potential to excel in these subjects when provided with the right guidance, 
-                resources, and learning environment.
-              </p>
-              <p>
-                Our journey began when a group of passionate educators recognized the need for a more engaging and effective approach 
-                to teaching math and science. We wanted to create a place where students could not only learn these subjects but 
-                truly fall in love with them.
-              </p>
+              <div className="story-card">
+                <div className="story-icon">
+                  <FaLightbulb />
+                </div>
+                <div className="story-content-text">
+                  <h3>The Vision</h3>
+                  <p>
+                    Founded in 2020, G'SON INTERNATIONAL ACADEMY was established with a revolutionary vision to transform mathematics and science education. 
+                    We believe that every student has the potential to excel in these subjects when provided with the right guidance, 
+                    resources, and learning environment.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="story-card">
+                <div className="story-icon">
+                  <FaHeart />
+                </div>
+                <div className="story-content-text">
+                  <h3>The Mission</h3>
+                  <p>
+                    Our journey began when a group of passionate educators recognized the need for a more engaging and effective approach 
+                    to teaching math and science. We wanted to create a place where students could not only learn these subjects but 
+                    truly fall in love with them.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="story-card">
+                <div className="story-icon">
+                  <FaTrophy />
+                </div>
+                <div className="story-content-text">
+                  <h3>The Impact</h3>
+                  <p>
+                    Today, we're proud to have helped thousands of students discover their potential in mathematics and science. 
+                    Our innovative teaching methods and personalized approach have created a community of lifelong learners 
+                    who are ready to shape the future.
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="story-image">
-              <div className="image-placeholder">
-                <div className="placeholder-icon">🏫</div>
-                <p>Our Beautiful Campus</p>
+            
+            <div className="story-visual">
+              <div className="visual-card">
+                <div className="visual-icon">
+                  <FaGraduationCap />
+                </div>
+                <h4>Our Beautiful Campus</h4>
+                <p>State-of-the-art facilities designed for optimal learning</p>
+                <div className="visual-features">
+                  <div className="feature-item">
+                    <FaBook />
+                    <span>Modern Classrooms</span>
+                  </div>
+                  <div className="feature-item">
+                    <FaUsers />
+                    <span>Interactive Labs</span>
+                  </div>
+                  <div className="feature-item">
+                    <FaAward />
+                    <span>Excellence Center</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -42,29 +131,75 @@ const AboutPage = () => {
       {/* Vision, Mission & Values */}
       <section className="vision-mission">
         <div className="container">
-          <h2 className="section-title">Our Vision, Mission & Values</h2>
+          <div className="section-header">
+            <div className="section-badge">
+              <FaStar />
+              <span>Our Foundation</span>
+            </div>
+            <h2>Our Vision, Mission & Values</h2>
+            <p className="section-subtitle">
+              The principles that guide everything we do
+            </p>
+          </div>
+          
           <div className="vmv-grid">
-            <div className="vmv-card">
-              <div className="vmv-icon">👁️</div>
-              <h3>Vision</h3>
-              <p>To be the leading institution in mathematics and science education, nurturing the next generation of innovators and problem-solvers who will shape the future.</p>
+            <div className="vmv-card vision-card">
+              <div className="vmv-icon">
+                <FaGlobe />
+              </div>
+              <div className="vmv-content">
+                <h3>Vision</h3>
+                <p>To be the leading institution in mathematics and science education, nurturing the next generation of innovators and problem-solvers who will shape the future.</p>
+                <div className="vmv-highlight">
+                  <FaRocket />
+                  <span>Shaping Tomorrow's Leaders</span>
+                </div>
+              </div>
             </div>
-            <div className="vmv-card">
-              <div className="vmv-icon">🎯</div>
-              <h3>Mission</h3>
-              <p>To provide exceptional education in mathematics and science through innovative teaching methods, cutting-edge technology, and personalized learning experiences that inspire lifelong learning.</p>
+            
+            <div className="vmv-card mission-card">
+              <div className="vmv-icon">
+                <FaBullseye />
+              </div>
+              <div className="vmv-content">
+                <h3>Mission</h3>
+                <p>To provide exceptional education in mathematics and science through innovative teaching methods, cutting-edge technology, and personalized learning experiences that inspire lifelong learning.</p>
+                <div className="vmv-highlight">
+                  <FaLightbulb />
+                  <span>Inspiring Lifelong Learning</span>
+                </div>
+              </div>
             </div>
-            <div className="vmv-card">
-              <div className="vmv-icon">💎</div>
-              <h3>Values</h3>
-              <ul>
-                <li>Excellence in education and student outcomes</li>
-                <li>Innovation in teaching and learning methods</li>
-                <li>Integrity and ethical conduct</li>
-                <li>Respect for diversity and inclusion</li>
-                <li>Collaboration and teamwork</li>
-                <li>Continuous improvement and growth</li>
-              </ul>
+            
+            <div className="vmv-card values-card">
+              <div className="vmv-icon">
+                <FaHeart />
+              </div>
+              <div className="vmv-content">
+                <h3>Values</h3>
+                <div className="values-list">
+                  <div className="value-item">
+                    <FaAward />
+                    <span>Excellence in education and student outcomes</span>
+                  </div>
+                  <div className="value-item">
+                    <FaLightbulb />
+                    <span>Innovation in teaching and learning methods</span>
+                  </div>
+                  <div className="value-item">
+                    <FaHandshake />
+                    <span>Integrity and ethical conduct</span>
+                  </div>
+                  <div className="value-item">
+                    <FaUsers />
+                    <span>Respect for diversity and inclusion</span>
+                  </div>
+                  <div className="value-item">
+                    <FaChartLine />
+                    <span>Continuous improvement and growth</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

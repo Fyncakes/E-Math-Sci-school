@@ -22,6 +22,10 @@ import StudentResourcesPage from './pages/StudentResourcesPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminProgramsPage from './pages/AdminProgramsPage';
+import AdminAddTeacherPage from './pages/AdminAddTeacherPage';
+import TeacherLoginPage from './pages/TeacherLoginPage';
+import TeacherDashboardPage from './pages/TeacherDashboardPage';
+import TeacherUploadPage from './pages/TeacherUploadPage';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -60,6 +64,10 @@ function App() {
           <Route path="/admin" element={<AdminLoginPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/programs" element={<AdminProgramsPage />} />
+          <Route path="/admin/add-teacher" element={<AdminAddTeacherPage />} />
+          <Route path="/teacher-login" element={<TeacherLoginPage />} />
+          <Route path="/teacher-dashboard" element={<TeacherDashboardPage />} />
+          <Route path="/teacher-upload" element={<TeacherUploadPage />} />
         </Routes>
         
         <Footer />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash, FaUser, FaLock, FaEnvelope, FaPhone, FaGraduationCap, FaUsers, FaTrophy, FaChalkboardTeacher, FaLaptop, FaHandshake, FaCheckCircle, FaRocket, FaStar } from 'react-icons/fa';
+import CelebrationEffect from '../components/CelebrationEffect';
 
 const StudentRegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const StudentRegisterPage = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -87,20 +89,41 @@ const StudentRegisterPage = () => {
     }
 
     try {
-      // Simulate API call with better validation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Store registration data
-      const registrationData = {
-        ...formData,
-        id: 'student_' + Date.now(),
-        registrationDate: new Date().toISOString(),
-        status: 'pending_approval'
-      };
-      localStorage.setItem('registrationData', JSON.stringify(registrationData));
-      
-      // Successful registration
-      navigate('/login?registered=true');
+      // API call to backend
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          role: 'student'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess('Registration successful! You can now login to your account.');
+        setShowCelebration(true);
+        // Clear form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          grade: '',
+          agreeToTerms: false
+        });
+        
+        // Redirect to login after 2 seconds
+        setTimeout(() => {
+          navigate('/login?registered=true');
+        }, 2000);
+      } else {
+        setError(data.message || 'Registration failed. Please try again.');
+      }
     } catch (err) {
       setError('Registration failed. Please try again.');
     } finally {
@@ -110,6 +133,10 @@ const StudentRegisterPage = () => {
 
   return (
     <div className="student-register-page">
+      <CelebrationEffect 
+        trigger={showCelebration} 
+        onComplete={() => setShowCelebration(false)} 
+      />
       <div className="register-container">
         <div className="register-card">
           <div className="register-header">
