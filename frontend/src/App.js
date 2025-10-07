@@ -15,8 +15,13 @@ import ContactPage from './pages/ContactPage';
 import StudentLoginPage from './pages/StudentLoginPage';
 import StudentRegisterPage from './pages/StudentRegisterPage';
 import StudentDashboardPage from './pages/StudentDashboardPage';
+import StudentClassesPage from './pages/StudentClassesPage';
+import StudentAssignmentsPage from './pages/StudentAssignmentsPage';
+import StudentGradesPage from './pages/StudentGradesPage';
+import StudentResourcesPage from './pages/StudentResourcesPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import AdminProgramsPage from './pages/AdminProgramsPage';
 
 // Import components
 import Navbar from './components/Navbar';
@@ -48,8 +53,13 @@ function App() {
           <Route path="/login" element={<StudentLoginPage />} />
           <Route path="/register" element={<StudentRegisterPage />} />
           <Route path="/dashboard" element={<StudentDashboardPage />} />
+          <Route path="/student/classes" element={<StudentClassesPage />} />
+          <Route path="/student/assignments" element={<StudentAssignmentsPage />} />
+          <Route path="/student/grades" element={<StudentGradesPage />} />
+          <Route path="/student/resources" element={<StudentResourcesPage />} />
           <Route path="/admin" element={<AdminLoginPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/programs" element={<AdminProgramsPage />} />
         </Routes>
         
         <Footer />

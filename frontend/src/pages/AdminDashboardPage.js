@@ -217,13 +217,13 @@ const AdminDashboardPage = () => {
               <span className="nav-badge">{stats.assignments}</span>
             </button>
             
-            <button 
-              className={`admin-nav-item ${activeTab === 'content' ? 'active' : ''}`}
-              onClick={() => setActiveTab('content')}
+            <Link 
+              to="/admin/programs"
+              className="admin-nav-item"
             >
               <FaFileAlt />
-              <span>Content</span>
-            </button>
+              <span>Programs</span>
+            </Link>
             
             <button 
               className={`admin-nav-item ${activeTab === 'media' ? 'active' : ''}`}

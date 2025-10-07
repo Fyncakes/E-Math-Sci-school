@@ -330,34 +330,34 @@ const StudentDashboardPage = () => {
             <FaChartLine />
             <span>Overview</span>
           </button>
-          <button 
-            className={`nav-tab ${activeTab === 'classes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('classes')}
+          <Link 
+            to="/student/classes"
+            className="nav-tab"
           >
             <FaGraduationCap />
             <span>Classes</span>
-          </button>
-          <button 
-            className={`nav-tab ${activeTab === 'assignments' ? 'active' : ''}`}
-            onClick={() => setActiveTab('assignments')}
+          </Link>
+          <Link 
+            to="/student/assignments"
+            className="nav-tab"
           >
             <FaClipboardList />
             <span>Assignments</span>
-          </button>
-          <button 
-            className={`nav-tab ${activeTab === 'grades' ? 'active' : ''}`}
-            onClick={() => setActiveTab('grades')}
+          </Link>
+          <Link 
+            to="/student/grades"
+            className="nav-tab"
           >
             <FaTrophy />
             <span>Grades</span>
-          </button>
-          <button 
-            className={`nav-tab ${activeTab === 'resources' ? 'active' : ''}`}
-            onClick={() => setActiveTab('resources')}
+          </Link>
+          <Link 
+            to="/student/resources"
+            className="nav-tab"
           >
             <FaBook />
             <span>Resources</span>
-          </button>
+          </Link>
         </div>
       </div>
 

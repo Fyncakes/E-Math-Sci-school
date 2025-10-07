@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash, FaUser, FaLock, FaEnvelope, FaPhone, FaGraduationCap, FaUsers, FaTrophy, FaChalkboardTeacher, FaLaptop, FaHandshake, FaCheckCircle, FaRocket, FaStar } from 'react-icons/fa';
 
 const StudentRegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ const StudentRegisterPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -45,35 +48,68 @@ const StudentRegisterPage = () => {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call with better validation
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Store registration data
+      const registrationData = {
+        ...formData,
+        id: 'student_' + Date.now(),
+        registrationDate: new Date().toISOString(),
+        status: 'pending_approval'
+      };
+      localStorage.setItem('registrationData', JSON.stringify(registrationData));
+      
       // Successful registration
       navigate('/login?registered=true');
+    } catch (err) {
+      setError('Registration failed. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   return (
-    <div className="register-page">
+    <div className="student-register-page">
       <div className="register-container">
         <div className="register-card">
           <div className="register-header">
-            <div className="logo">
-              <div className="logo-icon">🎓</div>
-              <h2>E-Math-Sci School</h2>
+            <div className="brand">
+              <div className="logo">
+                <FaGraduationCap />
+              </div>
+              <div className="brand-info">
+                <h1>E-School</h1>
+                <span>Student Registration</span>
+              </div>
             </div>
-            <h3>Student Registration</h3>
-            <p>Join our learning community and start your journey to excellence!</p>
+            <div className="welcome-section">
+              <h2>Join Our Learning Community!</h2>
+              <p>Start your journey to academic excellence with us</p>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="register-form">
-            {error && <div className="error-message">{error}</div>}
+            {error && (
+              <div className="error-alert">
+                <FaCheckCircle />
+                <span>{error}</span>
+              </div>
+            )}
             
             <div className="form-section">
-              <h4>Student Information</h4>
+              <div className="section-header">
+                <h4>Student Information</h4>
+                <span className="section-number">1</span>
+              </div>
+              
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="firstName">First Name *</label>
+                  <label htmlFor="firstName">
+                    <FaUser />
+                    First Name *
+                  </label>
                   <input
                     type="text"
                     id="firstName"
@@ -81,11 +117,15 @@ const StudentRegisterPage = () => {
                     value={formData.firstName}
                     onChange={handleChange}
                     placeholder="Enter first name"
+                    className="form-input"
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="lastName">Last Name *</label>
+                  <label htmlFor="lastName">
+                    <FaUser />
+                    Last Name *
+                  </label>
                   <input
                     type="text"
                     id="lastName"
@@ -93,13 +133,17 @@ const StudentRegisterPage = () => {
                     value={formData.lastName}
                     onChange={handleChange}
                     placeholder="Enter last name"
+                    className="form-input"
                     required
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label htmlFor="email">Email Address *</label>
+                <label htmlFor="email">
+                  <FaEnvelope />
+                  Email Address *
+                </label>
                 <input
                   type="email"
                   id="email"
@@ -107,45 +151,76 @@ const StudentRegisterPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter email address"
+                  className="form-input"
                   required
                 />
               </div>
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="password">Password *</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Create password"
-                    required
-                  />
+                  <label htmlFor="password">
+                    <FaLock />
+                    Password *
+                  </label>
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Create password"
+                      className="form-input"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirm Password *</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    placeholder="Confirm password"
-                    required
-                  />
+                  <label htmlFor="confirmPassword">
+                    <FaLock />
+                    Confirm Password *
+                  </label>
+                  <div className="password-input-container">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm password"
+                      className="form-input"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="grade">Grade Level *</label>
+                  <label htmlFor="grade">
+                    <FaGraduationCap />
+                    Grade Level *
+                  </label>
                   <select
                     id="grade"
                     name="grade"
                     value={formData.grade}
                     onChange={handleChange}
+                    className="form-input"
                     required
                   >
                     <option value="">Select Grade</option>
@@ -164,12 +239,16 @@ const StudentRegisterPage = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="program">Program Interest *</label>
+                  <label htmlFor="program">
+                    <FaStar />
+                    Program Interest *
+                  </label>
                   <select
                     id="program"
                     name="program"
                     value={formData.program}
                     onChange={handleChange}
+                    className="form-input"
                     required
                   >
                     <option value="">Select Program</option>
@@ -183,9 +262,16 @@ const StudentRegisterPage = () => {
             </div>
 
             <div className="form-section">
-              <h4>Parent/Guardian Information</h4>
+              <div className="section-header">
+                <h4>Parent/Guardian Information</h4>
+                <span className="section-number">2</span>
+              </div>
+              
               <div className="form-group">
-                <label htmlFor="parentName">Parent/Guardian Name *</label>
+                <label htmlFor="parentName">
+                  <FaUsers />
+                  Parent/Guardian Name *
+                </label>
                 <input
                   type="text"
                   id="parentName"
@@ -193,13 +279,17 @@ const StudentRegisterPage = () => {
                   value={formData.parentName}
                   onChange={handleChange}
                   placeholder="Enter parent/guardian name"
+                  className="form-input"
                   required
                 />
               </div>
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="parentEmail">Parent Email *</label>
+                  <label htmlFor="parentEmail">
+                    <FaEnvelope />
+                    Parent Email *
+                  </label>
                   <input
                     type="email"
                     id="parentEmail"
@@ -207,11 +297,15 @@ const StudentRegisterPage = () => {
                     value={formData.parentEmail}
                     onChange={handleChange}
                     placeholder="Enter parent email"
+                    className="form-input"
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="parentPhone">Parent Phone *</label>
+                  <label htmlFor="parentPhone">
+                    <FaPhone />
+                    Parent Phone *
+                  </label>
                   <input
                     type="tel"
                     id="parentPhone"
@@ -219,6 +313,7 @@ const StudentRegisterPage = () => {
                     value={formData.parentPhone}
                     onChange={handleChange}
                     placeholder="Enter parent phone"
+                    className="form-input"
                     required
                   />
                 </div>
@@ -227,7 +322,7 @@ const StudentRegisterPage = () => {
 
             <div className="form-section">
               <div className="checkbox-group">
-                <label className="checkbox-label">
+                <label className="checkbox-container">
                   <input
                     type="checkbox"
                     name="agreeToTerms"
@@ -235,6 +330,7 @@ const StudentRegisterPage = () => {
                     onChange={handleChange}
                     required
                   />
+                  <span className="checkmark"></span>
                   <span>I agree to the <Link to="/terms">Terms and Conditions</Link> and <Link to="/privacy">Privacy Policy</Link> *</span>
                 </label>
               </div>
@@ -242,10 +338,20 @@ const StudentRegisterPage = () => {
 
             <button 
               type="submit" 
-              className="register-btn"
+              className="register-button"
               disabled={isLoading}
             >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
+              {isLoading ? (
+                <>
+                  <div className="spinner"></div>
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  <FaRocket />
+                  Create Account
+                </>
+              )}
             </button>
           </form>
 
@@ -255,27 +361,68 @@ const StudentRegisterPage = () => {
         </div>
 
         <div className="register-info">
-          <h3>Why Choose E-Math-Sci School?</h3>
-          <div className="info-cards">
-            <div className="info-card">
-              <div className="info-icon">🏆</div>
-              <h4>Proven Excellence</h4>
-              <p>95% of our students achieve their academic goals</p>
+          <div className="info-header">
+            <div className="info-logo">
+              <FaTrophy />
             </div>
-            <div className="info-card">
-              <div className="info-icon">👨‍🏫</div>
-              <h4>Expert Teachers</h4>
-              <p>Learn from experienced and passionate educators</p>
+            <h3>Why Choose E-School?</h3>
+            <p>Join thousands of successful students</p>
+          </div>
+          
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaTrophy />
+              </div>
+              <div className="feature-content">
+                <h4>Proven Excellence</h4>
+                <p>95% of our students achieve their academic goals</p>
+              </div>
             </div>
-            <div className="info-card">
-              <div className="info-icon">💻</div>
-              <h4>Modern Technology</h4>
-              <p>State-of-the-art learning tools and resources</p>
+            
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaChalkboardTeacher />
+              </div>
+              <div className="feature-content">
+                <h4>Expert Teachers</h4>
+                <p>Learn from experienced and passionate educators</p>
+              </div>
             </div>
-            <div className="info-card">
-              <div className="info-icon">🤝</div>
-              <h4>Supportive Community</h4>
-              <p>Join a caring and inclusive learning environment</p>
+            
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaLaptop />
+              </div>
+              <div className="feature-content">
+                <h4>Modern Technology</h4>
+                <p>State-of-the-art learning tools and resources</p>
+              </div>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaHandshake />
+              </div>
+              <div className="feature-content">
+                <h4>Supportive Community</h4>
+                <p>Join a caring and inclusive learning environment</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="stats-preview">
+            <div className="stat-item">
+              <div className="stat-number">2,500+</div>
+              <div className="stat-label">Active Students</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">95%</div>
+              <div className="stat-label">Success Rate</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">50+</div>
+              <div className="stat-label">Expert Teachers</div>
             </div>
           </div>
         </div>

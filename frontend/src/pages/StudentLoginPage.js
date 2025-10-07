@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash, FaUser, FaLock, FaGoogle, FaMicrosoft, FaGraduationCap, FaBook, FaChartLine, FaUsers, FaRocket, FaCheckCircle } from 'react-icons/fa';
 
 const StudentLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +9,7 @@ const StudentLoginPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -22,63 +24,108 @@ const StudentLoginPage = () => {
     setIsLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call with better validation
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       if (formData.email && formData.password) {
-        // Successful login
+        // Store user data in localStorage for demo
+        const userData = {
+          id: 'student_' + Date.now(),
+          email: formData.email,
+          name: formData.email.split('@')[0],
+          role: 'student',
+          loginTime: new Date().toISOString()
+        };
+        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem('studentId', 'sarah'); // Default student profile
+        
         navigate('/dashboard');
       } else {
         setError('Please fill in all fields');
       }
+    } catch (err) {
+      setError('Login failed. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
-    <div className="login-page">
+    <div className="student-login-page">
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <div className="logo">
-              <div className="logo-icon">🎓</div>
-              <h2>E-Math-Sci School</h2>
+            <div className="brand">
+              <div className="logo">
+                <FaGraduationCap />
+              </div>
+              <div className="brand-info">
+                <h1>E-School</h1>
+                <span>Student Portal</span>
+              </div>
             </div>
-            <h3>Student Login</h3>
-            <p>Welcome back! Please sign in to your account</p>
+            <div className="welcome-section">
+              <h2>Welcome Back!</h2>
+              <p>Sign in to continue your learning journey</p>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
-            {error && <div className="error-message">{error}</div>}
+            {error && (
+              <div className="error-alert">
+                <FaCheckCircle />
+                <span>{error}</span>
+              </div>
+            )}
             
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="email">
+                <FaUser />
+                Email Address
+              </label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Enter your email address"
                 required
+                className="form-input"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-                required
-              />
+              <label htmlFor="password">
+                <FaLock />
+                Password
+              </label>
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  required
+                  className="form-input"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
             </div>
 
             <div className="form-options">
-              <label className="checkbox-label">
+              <label className="checkbox-container">
                 <input type="checkbox" />
+                <span className="checkmark"></span>
                 <span>Remember me</span>
               </label>
               <Link to="/forgot-password" className="forgot-link">Forgot Password?</Link>
@@ -86,46 +133,94 @@ const StudentLoginPage = () => {
 
             <button 
               type="submit" 
-              className="login-btn"
+              className="login-button"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? (
+                <>
+                  <div className="spinner"></div>
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  <FaRocket />
+                  Sign In
+                </>
+              )}
             </button>
           </form>
 
           <div className="login-footer">
-            <p>Don't have an account? <Link to="/register">Sign up here</Link></p>
+            <p>Don't have an account? <Link to="/register">Create one here</Link></p>
             <div className="divider">
-              <span>or</span>
+              <span>or continue with</span>
             </div>
             <div className="social-login">
               <button className="social-btn google">
-                <span>🔍</span> Continue with Google
+                <FaGoogle />
+                Google
               </button>
               <button className="social-btn microsoft">
-                <span>🪟</span> Continue with Microsoft
+                <FaMicrosoft />
+                Microsoft
               </button>
             </div>
           </div>
         </div>
 
         <div className="login-info">
-          <h3>Welcome to Your Learning Journey!</h3>
-          <div className="info-cards">
-            <div className="info-card">
-              <div className="info-icon">📚</div>
-              <h4>Access Your Courses</h4>
-              <p>Continue your learning with personalized lesson plans and resources</p>
+          <div className="info-header">
+            <div className="info-logo">
+              <FaRocket />
             </div>
-            <div className="info-card">
-              <div className="info-icon">📊</div>
-              <h4>Track Your Progress</h4>
-              <p>Monitor your academic performance and achievements</p>
+            <h3>Your Learning Journey Starts Here</h3>
+            <p>Join thousands of students already learning with us</p>
+          </div>
+          
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaBook />
+              </div>
+              <div className="feature-content">
+                <h4>Interactive Learning</h4>
+                <p>Engage with dynamic content and personalized lesson plans</p>
+              </div>
             </div>
-            <div className="info-card">
-              <div className="info-icon">👥</div>
-              <h4>Connect with Teachers</h4>
-              <p>Communicate with your instructors and get help when needed</p>
+            
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaChartLine />
+              </div>
+              <div className="feature-content">
+                <h4>Track Progress</h4>
+                <p>Monitor your academic performance with detailed analytics</p>
+              </div>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">
+                <FaUsers />
+              </div>
+              <div className="feature-content">
+                <h4>Expert Teachers</h4>
+                <p>Learn from qualified instructors and get personalized support</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="stats-preview">
+            <div className="stat-item">
+              <div className="stat-number">2,500+</div>
+              <div className="stat-label">Active Students</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">95%</div>
+              <div className="stat-label">Success Rate</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">50+</div>
+              <div className="stat-label">Expert Teachers</div>
             </div>
           </div>
         </div>
