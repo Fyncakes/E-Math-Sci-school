@@ -75,6 +75,27 @@ const AboutPage = () => {
         <div className="container">
           <h2 className="section-title">Meet Our Leadership Team</h2>
           <div className="leadership-grid">
+            <div className="leader-card featured">
+              <div className="leader-image">
+                <div className="placeholder-avatar">👨‍🏫</div>
+              </div>
+              <div className="leader-info">
+                <h3>Peter Omara</h3>
+                <p className="position">Senior Mathematics & Physics Teacher</p>
+                <p className="bio">
+                  Peter Omara is a distinguished educator with over 15 years of experience in teaching mathematics and physics. 
+                  He holds a Master's degree in Applied Mathematics and a Bachelor's in Physics from the University of Nairobi. 
+                  Peter specializes in making complex mathematical concepts accessible to students through innovative teaching methods 
+                  and real-world applications. His passion for education has helped over 2,000 students achieve excellence in 
+                  mathematics and physics, with many going on to pursue careers in engineering, medicine, and research.
+                </p>
+                <div className="teacher-credentials">
+                  <span className="credential">MSc Applied Mathematics</span>
+                  <span className="credential">BSc Physics</span>
+                  <span className="credential">15+ Years Experience</span>
+                </div>
+              </div>
+            </div>
             <div className="leader-card">
               <div className="leader-image">
                 <div className="placeholder-avatar">👨‍💼</div>
@@ -104,6 +125,68 @@ const AboutPage = () => {
                 <p className="position">Head of Mathematics</p>
                 <p className="bio">Ms. Chen has developed innovative teaching methods that have helped thousands of students excel in mathematics.</p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Teaching Excellence */}
+      <section className="teaching-excellence">
+        <div className="container">
+          <h2 className="section-title">Our Teaching Excellence</h2>
+          <div className="excellence-grid">
+            <div className="excellence-card">
+              <div className="excellence-icon">🎓</div>
+              <h3>Expert Faculty</h3>
+              <p>Our teachers hold advanced degrees in their respective fields and have years of teaching experience.</p>
+            </div>
+            <div className="excellence-card">
+              <div className="excellence-icon">🔬</div>
+              <h3>Hands-on Learning</h3>
+              <p>We believe in learning by doing, with practical experiments and real-world applications.</p>
+            </div>
+            <div className="excellence-card">
+              <div className="excellence-icon">💡</div>
+              <h3>Innovative Methods</h3>
+              <p>We use cutting-edge teaching techniques and technology to make learning engaging and effective.</p>
+            </div>
+            <div className="excellence-card">
+              <div className="excellence-icon">🌟</div>
+              <h3>Student Success</h3>
+              <p>Our students consistently achieve outstanding results in national and international competitions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* School Statistics */}
+      <section className="school-stats">
+        <div className="container">
+          <h2 className="section-title">Our Impact in Numbers</h2>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-number">2,500+</div>
+              <div className="stat-label">Students Taught</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">95%</div>
+              <div className="stat-label">Success Rate</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">50+</div>
+              <div className="stat-label">Expert Teachers</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">15</div>
+              <div className="stat-label">Years of Excellence</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">100+</div>
+              <div className="stat-label">Awards Won</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">98%</div>
+              <div className="stat-label">Parent Satisfaction</div>
             </div>
           </div>
         </div>

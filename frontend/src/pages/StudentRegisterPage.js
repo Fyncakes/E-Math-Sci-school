@@ -35,7 +35,45 @@ const StudentRegisterPage = () => {
     setIsLoading(true);
     setError('');
 
-    // Validation
+    // Enhanced validation
+    if (!formData.firstName.trim()) {
+      setError('Please enter your first name');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.lastName.trim()) {
+      setError('Please enter your last name');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError('Please enter your email address');
+      setIsLoading(false);
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      setError('Please enter a password');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setIsLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setIsLoading(false);

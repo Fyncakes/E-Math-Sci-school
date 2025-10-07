@@ -24,26 +24,43 @@ const StudentLoginPage = () => {
     setIsLoading(true);
     setError('');
 
+    // Enhanced validation
+    if (!formData.email.trim()) {
+      setError('Please enter your email address');
+      setIsLoading(false);
+      return;
+    }
+    
+    if (!formData.password.trim()) {
+      setError('Please enter your password');
+      setIsLoading(false);
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       // Simulate API call with better validation
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      if (formData.email && formData.password) {
-        // Store user data in localStorage for demo
-        const userData = {
-          id: 'student_' + Date.now(),
-          email: formData.email,
-          name: formData.email.split('@')[0],
-          role: 'student',
-          loginTime: new Date().toISOString()
-        };
-        localStorage.setItem('userData', JSON.stringify(userData));
-        localStorage.setItem('studentId', 'sarah'); // Default student profile
-        
-        navigate('/dashboard');
-      } else {
-        setError('Please fill in all fields');
-      }
+      // Store user data in localStorage for demo
+      const userData = {
+        id: 'student_' + Date.now(),
+        email: formData.email,
+        name: formData.email.split('@')[0],
+        role: 'student',
+        loginTime: new Date().toISOString()
+      };
+      localStorage.setItem('userData', JSON.stringify(userData));
+      localStorage.setItem('studentId', 'sarah'); // Default student profile
+      
+      navigate('/dashboard');
     } catch (err) {
       setError('Login failed. Please try again.');
     } finally {
