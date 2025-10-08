@@ -99,7 +99,7 @@ const StudentResourcesPage = () => {
       type: 'app',
       size: '45.8 MB',
       description: 'Interactive mobile application for practicing algebra and geometry problems with instant feedback.',
-      author: 'E-School Development Team',
+      author: "G'SON INTERNATIONAL ACADEMY Development Team",
       uploadDate: '2024-10-12T16:20:00Z',
       lastModified: '2024-10-12T16:20:00Z',
       downloads: 2100,

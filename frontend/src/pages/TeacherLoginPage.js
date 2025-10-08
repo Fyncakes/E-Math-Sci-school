@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   FaChalkboardTeacher, FaEnvelope, FaLock, FaEye, FaEyeSlash, 
   FaGraduationCap, FaSignInAlt, FaUser, FaBook, FaUsers,
-  FaExclamationTriangle, FaCheckCircle, FaSpinner
+  FaExclamationTriangle, FaCheckCircle, FaSpinner, FaRocket,
+  FaCalendar, FaFileAlt, FaChartLine, FaAward, FaStar
 } from 'react-icons/fa';
 
 const TeacherLoginPage = () => {
@@ -97,7 +98,7 @@ const TeacherLoginPage = () => {
             <div className="login-title">
               <h1>G'SON INTERNATIONAL ACADEMY</h1>
               <h2>Teacher Portal</h2>
-              <p>Access your teaching dashboard</p>
+              <p>Access your teaching dashboard and manage your classes</p>
             </div>
           </div>
 
@@ -106,7 +107,6 @@ const TeacherLoginPage = () => {
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <div className="input-group">
-                <FaEnvelope />
                 <input
                   type="email"
                   id="email"
@@ -122,7 +122,6 @@ const TeacherLoginPage = () => {
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <div className="input-group">
-                <FaLock />
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
@@ -175,34 +174,6 @@ const TeacherLoginPage = () => {
               )}
             </button>
           </form>
-
-          {/* Teacher Features Info */}
-          <div className="teacher-features">
-            <h3>Teacher Portal Features</h3>
-            <div className="features-grid">
-              <div className="feature-card">
-                <FaUsers />
-                <div>
-                  <h4>Student Management</h4>
-                  <p>View and manage your students</p>
-                </div>
-              </div>
-              <div className="feature-card">
-                <FaBook />
-                <div>
-                  <h4>Content Upload</h4>
-                  <p>Upload lessons, assignments, and resources</p>
-                </div>
-              </div>
-              <div className="feature-card">
-                <FaChalkboardTeacher />
-                <div>
-                  <h4>Class Management</h4>
-                  <p>Schedule and manage your classes</p>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* Footer Links */}
           <div className="login-footer">

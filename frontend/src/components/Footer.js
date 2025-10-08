@@ -12,7 +12,7 @@ const Footer = () => {
               <div className="footer-logo">
                 <Logo size="medium" showText={false} />
                 <div className="brand-text">
-                  <h3>E-School</h3>
+                  <h3>G'SON INTERNATIONAL ACADEMY</h3>
                   <p>Learning Hub</p>
                 </div>
               </div>
@@ -80,7 +80,7 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <div className="footer-bottom-content">
-            <p>&copy; {new Date().getFullYear()} E-School. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} G'SON INTERNATIONAL ACADEMY. All rights reserved.</p>
             <div className="footer-legal">
               <Link to="/privacy">Privacy Policy</Link>
               <Link to="/terms">Terms of Service</Link>

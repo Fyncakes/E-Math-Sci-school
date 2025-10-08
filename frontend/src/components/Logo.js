@@ -14,7 +14,7 @@ const Logo = ({ size = 'medium', showText = true, className = '' }) => {
       <div className="logo-icon">
         <img 
           src="/logo.png" 
-          alt="E-School Logo" 
+          alt="G'SON INTERNATIONAL ACADEMY Logo" 
           className="logo-image"
         />
       </div>

@@ -5,6 +5,7 @@ import CelebrationEffect from '../components/CelebrationEffect';
 
 const StudentRegisterPage = () => {
   const [formData, setFormData] = useState({
+    accountType: 'student',
     firstName: '',
     lastName: '',
     email: '',
@@ -15,7 +16,8 @@ const StudentRegisterPage = () => {
     parentName: '',
     parentEmail: '',
     parentPhone: '',
-    agreeToTerms: false
+    agreeToTerms: false,
+    profileImage: null
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,11 +27,18 @@ const StudentRegisterPage = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
+    const { name, value, type, checked, files } = e.target;
+    if (type === 'file') {
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: type === 'checkbox' ? checked : value
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -145,7 +154,7 @@ const StudentRegisterPage = () => {
                 <FaGraduationCap />
               </div>
               <div className="brand-info">
-                <h1>E-School</h1>
+                <h1>G'SON INTERNATIONAL ACADEMY</h1>
                 <span>Student Registration</span>
               </div>
             </div>
@@ -156,6 +165,78 @@ const StudentRegisterPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="register-form">
+            {/* Role Selection */}
+            <div className="form-section">
+              <div className="section-header">
+                <h4>Account Type</h4>
+                <span className="section-number">1</span>
+              </div>
+              
+              <div className="role-selector">
+                <div className="role-option">
+                  <input
+                    type="radio"
+                    id="student"
+                    name="accountType"
+                    value="student"
+                    checked={formData.accountType === 'student'}
+                    onChange={handleChange}
+                    className="role-radio"
+                  />
+                  <label htmlFor="student" className="role-label">
+                    <div className="role-icon">
+                      <FaGraduationCap />
+                    </div>
+                    <div className="role-info">
+                      <span className="role-name">Student</span>
+                      <span className="role-desc">Enroll in courses and track your progress</span>
+                    </div>
+                  </label>
+                </div>
+                
+                <div className="role-option">
+                  <input
+                    type="radio"
+                    id="parent"
+                    name="accountType"
+                    value="parent"
+                    checked={formData.accountType === 'parent'}
+                    onChange={handleChange}
+                    className="role-radio"
+                  />
+                  <label htmlFor="parent" className="role-label">
+                    <div className="role-icon">
+                      <FaUsers />
+                    </div>
+                    <div className="role-info">
+                      <span className="role-name">Parent</span>
+                      <span className="role-desc">Monitor your child's academic progress</span>
+                    </div>
+                  </label>
+                </div>
+                
+                <div className="role-option">
+                  <input
+                    type="radio"
+                    id="visitor"
+                    name="accountType"
+                    value="visitor"
+                    checked={formData.accountType === 'visitor'}
+                    onChange={handleChange}
+                    className="role-radio"
+                  />
+                  <label htmlFor="visitor" className="role-label">
+                    <div className="role-icon">
+                      <FaUser />
+                    </div>
+                    <div className="role-info">
+                      <span className="role-name">Visitor</span>
+                      <span className="role-desc">Explore our school and programs</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
             {error && (
               <div className="error-alert">
                 <FaCheckCircle />
@@ -166,7 +247,7 @@ const StudentRegisterPage = () => {
             <div className="form-section">
               <div className="section-header">
                 <h4>Student Information</h4>
-                <span className="section-number">1</span>
+                <span className="section-number">2</span>
               </div>
               
               <div className="form-row">
@@ -274,6 +355,41 @@ const StudentRegisterPage = () => {
                 </div>
               </div>
 
+              <div className="form-group">
+                <label>Profile Photo</label>
+                <div className="student-image-upload">
+                  <input
+                    type="file"
+                    name="profileImage"
+                    accept="image/*"
+                    onChange={handleChange}
+                    className="file-input"
+                    id="studentProfileImage"
+                  />
+                  <label htmlFor="studentProfileImage" className="file-upload-label">
+                    <FaUser />
+                    <span>{formData.profileImage ? formData.profileImage.name : 'Choose Profile Photo'}</span>
+                  </label>
+                  {formData.profileImage && (
+                    <div className="student-image-preview">
+                      <img 
+                        src={URL.createObjectURL(formData.profileImage)} 
+                        alt="Profile preview" 
+                        className="student-preview-image"
+                      />
+                      <button 
+                        type="button"
+                        className="remove-image-btn"
+                        onClick={() => setFormData({...formData, profileImage: null})}
+                        title="Remove image"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="grade">
@@ -329,7 +445,7 @@ const StudentRegisterPage = () => {
             <div className="form-section">
               <div className="section-header">
                 <h4>Parent/Guardian Information</h4>
-                <span className="section-number">2</span>
+                <span className="section-number">3</span>
               </div>
               
               <div className="form-group">
@@ -430,7 +546,7 @@ const StudentRegisterPage = () => {
             <div className="info-logo">
               <FaTrophy />
             </div>
-            <h3>Why Choose E-School?</h3>
+            <h3>Why Choose G'SON INTERNATIONAL ACADEMY?</h3>
             <p>Join thousands of successful students</p>
           </div>
           

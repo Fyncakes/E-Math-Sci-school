@@ -1,303 +1,219 @@
 const express = require('express');
-const { body, validationResult } = require('express-validator');
-const Course = require('../models/Course');
-const User = require('../models/User');
-const { auth, authorize } = require('../middleware/auth');
-
 const router = express.Router();
 
-// @route   GET /api/courses
-// @desc    Get all published courses with filtering
-// @access  Public
-router.get('/', async (req, res) => {
+// In-memory storage for courses (temporary solution)
+let courses = [
+  {
+    id: 1,
+    title: "Advanced Mathematics",
+    description: "Comprehensive course covering advanced mathematical concepts",
+    subject: "mathematics",
+    grade: "grade-12",
+    duration: 16,
+    instructor: "Dr. Sarah Johnson",
+    maxStudents: 30,
+    startDate: "2024-02-01",
+    endDate: "2024-05-31",
+    schedule: "Monday, Wednesday, Friday 2:00 PM - 3:30 PM",
+    prerequisites: "Basic algebra and geometry",
+    objectives: "Master advanced calculus, linear algebra, and statistics",
+    materials: [
+      { name: "Textbook: Advanced Calculus", type: "document", url: "/materials/calc-textbook.pdf" },
+      { name: "Video: Introduction to Linear Algebra", type: "video", url: "/materials/linear-algebra-intro.mp4" }
+    ],
+    isActive: true,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 2,
+    title: "Physics Fundamentals",
+    description: "Introduction to physics concepts and principles",
+    subject: "physics",
+    grade: "grade-10",
+    duration: 12,
+    instructor: "Prof. Michael Chen",
+    maxStudents: 25,
+    startDate: "2024-01-15",
+    endDate: "2024-04-15",
+    schedule: "Tuesday, Thursday 1:00 PM - 2:30 PM",
+    prerequisites: "Basic mathematics",
+    objectives: "Understand fundamental physics laws and principles",
+    materials: [
+      { name: "Lab Manual", type: "document", url: "/materials/physics-lab-manual.pdf" }
+    ],
+    isActive: true,
+    createdAt: new Date().toISOString()
+  }
+];
+
+// GET /api/courses - Get all courses
+router.get('/', (req, res) => {
   try {
-    const { 
-      subject, 
-      grade, 
-      difficulty, 
-      isFree, 
-      search, 
-      page = 1, 
-      limit = 10,
-      sortBy = 'createdAt',
-      sortOrder = 'desc'
-    } = req.query;
-
-    const filter = { isPublished: true };
-    
-    if (subject) filter.subject = subject;
-    if (grade) filter.grade = grade;
-    if (difficulty) filter.difficulty = difficulty;
-    if (isFree !== undefined) filter.isFree = isFree === 'true';
-    
-    if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
-      ];
-    }
-
-    const sort = {};
-    sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-
-    const courses = await Course.find(filter)
-      .populate('instructor', 'firstName lastName avatar')
-      .sort(sort)
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .select('-modules.lessons.content');
-
-    const total = await Course.countDocuments(filter);
-
+    console.log('GET /api/courses - Returning', courses.length, 'courses');
     res.json({
-      courses,
-      pagination: {
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(total / limit),
-        totalCourses: total,
-        hasNext: page < Math.ceil(total / limit),
-        hasPrev: page > 1
-      }
+      success: true,
+      data: courses,
+      count: courses.length
     });
   } catch (error) {
-    console.error('Get courses error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error fetching courses:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching courses',
+      error: error.message
+    });
   }
 });
 
-// @route   GET /api/courses/:id
-// @desc    Get single course with full details
-// @access  Public
-router.get('/:id', async (req, res) => {
+// GET /api/courses/:id - Get course by ID
+router.get('/:id', (req, res) => {
   try {
-    const course = await Course.findById(req.params.id)
-      .populate('instructor', 'firstName lastName avatar subjects')
-      .populate('prerequisites', 'title description');
-
+    const courseId = parseInt(req.params.id);
+    const course = courses.find(c => c.id === courseId);
+    
     if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
     }
-
-    if (!course.isPublished) {
-      return res.status(404).json({ message: 'Course not available' });
-    }
-
-    res.json({ course });
+    
+    res.json({
+      success: true,
+      data: course
+    });
   } catch (error) {
-    console.error('Get course error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching course',
+      error: error.message
+    });
   }
 });
 
-// @route   POST /api/courses
-// @desc    Create new course
-// @access  Private (Teachers and Admins)
-router.post('/', auth, authorize('teacher', 'admin'), [
-  body('title').trim().isLength({ min: 5, max: 100 }).withMessage('Title must be 5-100 characters'),
-  body('description').trim().isLength({ min: 20, max: 1000 }).withMessage('Description must be 20-1000 characters'),
-  body('subject').isIn(['mathematics', 'physics', 'chemistry', 'biology', 'computer-science']).withMessage('Invalid subject'),
-  body('grade').isIn(['6', '7', '8', '9', '10', '11', '12', 'college']).withMessage('Invalid grade'),
-  body('duration').isInt({ min: 1, max: 52 }).withMessage('Duration must be 1-52 weeks'),
-  body('difficulty').isIn(['beginner', 'intermediate', 'advanced']).withMessage('Invalid difficulty level')
-], async (req, res) => {
+// POST /api/courses - Create new course
+router.post('/', (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation failed', 
-        errors: errors.array() 
+    const {
+      title,
+      description,
+      subject,
+      grade,
+      duration,
+      instructor,
+      maxStudents,
+      startDate,
+      endDate,
+      schedule,
+      prerequisites,
+      objectives,
+      materials,
+      isActive
+    } = req.body;
+
+    // Validation
+    if (!title || !description || !subject || !grade) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: title, description, subject, grade'
       });
     }
 
-    const courseData = {
-      ...req.body,
-      instructor: req.user._id
+    const newCourse = {
+      id: courses.length > 0 ? Math.max(...courses.map(c => c.id)) + 1 : 1,
+      title,
+      description,
+      subject,
+      grade,
+      duration: duration || 12,
+      instructor: instructor || 'TBA',
+      maxStudents: maxStudents || 30,
+      startDate: startDate || new Date().toISOString().split('T')[0],
+      endDate: endDate || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      schedule: schedule || 'TBA',
+      prerequisites: prerequisites || '',
+      objectives: objectives || '',
+      materials: materials || [],
+      isActive: isActive !== undefined ? isActive : true,
+      createdAt: new Date().toISOString()
     };
 
-    const course = new Course(courseData);
-    await course.save();
-
-    await course.populate('instructor', 'firstName lastName avatar');
+    courses.push(newCourse);
+    console.log('POST /api/courses - Added new course:', newCourse.title, 'Total courses:', courses.length);
 
     res.status(201).json({
+      success: true,
       message: 'Course created successfully',
-      course
+      data: newCourse
     });
   } catch (error) {
-    console.error('Create course error:', error);
-    res.status(500).json({ message: 'Server error during course creation' });
+    res.status(500).json({
+      success: false,
+      message: 'Error creating course',
+      error: error.message
+    });
   }
 });
 
-// @route   PUT /api/courses/:id
-// @desc    Update course
-// @access  Private (Course Instructor or Admin)
-router.put('/:id', auth, async (req, res) => {
+// PUT /api/courses/:id - Update course
+router.put('/:id', (req, res) => {
   try {
-    const course = await Course.findById(req.params.id);
+    const courseId = parseInt(req.params.id);
+    const courseIndex = courses.findIndex(c => c.id === courseId);
     
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-
-    // Check if user is instructor or admin
-    if (course.instructor.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Not authorized to update this course' });
-    }
-
-    const updatedCourse = await Course.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate('instructor', 'firstName lastName avatar');
-
-    res.json({
-      message: 'Course updated successfully',
-      course: updatedCourse
-    });
-  } catch (error) {
-    console.error('Update course error:', error);
-    res.status(500).json({ message: 'Server error during course update' });
-  }
-});
-
-// @route   POST /api/courses/:id/enroll
-// @desc    Enroll student in course
-// @access  Private (Students)
-router.post('/:id/enroll', auth, authorize('student'), async (req, res) => {
-  try {
-    const course = await Course.findById(req.params.id);
-    
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-
-    if (!course.isPublished) {
-      return res.status(400).json({ message: 'Course is not available for enrollment' });
-    }
-
-    // Check if already enrolled
-    const alreadyEnrolled = course.enrolledStudents.some(
-      enrollment => enrollment.student.toString() === req.user._id.toString()
-    );
-
-    if (alreadyEnrolled) {
-      return res.status(400).json({ message: 'Already enrolled in this course' });
-    }
-
-    // Add student to course
-    course.enrolledStudents.push({
-      student: req.user._id,
-      enrolledAt: new Date()
-    });
-
-    // Add course to user's enrolled courses
-    await User.findByIdAndUpdate(req.user._id, {
-      $addToSet: { enrolledCourses: course._id }
-    });
-
-    course.totalStudents = course.enrolledStudents.length;
-    await course.save();
-
-    res.json({
-      message: 'Successfully enrolled in course',
-      course: {
-        id: course._id,
-        title: course.title,
-        enrolledAt: new Date()
-      }
-    });
-  } catch (error) {
-    console.error('Enroll error:', error);
-    res.status(500).json({ message: 'Server error during enrollment' });
-  }
-});
-
-// @route   POST /api/courses/:id/rate
-// @desc    Rate and review course
-// @access  Private (Enrolled Students)
-router.post('/:id/rate', auth, [
-  body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5'),
-  body('review').optional().isLength({ max: 500 }).withMessage('Review cannot exceed 500 characters')
-], async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation failed', 
-        errors: errors.array() 
+    if (courseIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
       });
     }
 
-    const course = await Course.findById(req.params.id);
-    
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-
-    // Check if student is enrolled
-    const isEnrolled = course.enrolledStudents.some(
-      enrollment => enrollment.student.toString() === req.user._id.toString()
-    );
-
-    if (!isEnrolled) {
-      return res.status(400).json({ message: 'Must be enrolled to rate this course' });
-    }
-
-    // Check if already rated
-    const existingRating = course.ratings.find(
-      rating => rating.student.toString() === req.user._id.toString()
-    );
-
-    if (existingRating) {
-      return res.status(400).json({ message: 'Already rated this course' });
-    }
-
-    const { rating, review } = req.body;
-
-    course.ratings.push({
-      student: req.user._id,
-      rating,
-      review
-    });
-
-    course.calculateAverageRating();
-    await course.save();
+    courses[courseIndex] = {
+      ...courses[courseIndex],
+      ...req.body,
+      id: courseId,
+      updatedAt: new Date().toISOString()
+    };
 
     res.json({
-      message: 'Course rated successfully',
-      averageRating: course.averageRating
+      success: true,
+      message: 'Course updated successfully',
+      data: courses[courseIndex]
     });
   } catch (error) {
-    console.error('Rate course error:', error);
-    res.status(500).json({ message: 'Server error during rating' });
+    res.status(500).json({
+      success: false,
+      message: 'Error updating course',
+      error: error.message
+    });
   }
 });
 
-// @route   GET /api/courses/:id/students
-// @desc    Get enrolled students (for instructors)
-// @access  Private (Course Instructor or Admin)
-router.get('/:id/students', auth, async (req, res) => {
+// DELETE /api/courses/:id - Delete course
+router.delete('/:id', (req, res) => {
   try {
-    const course = await Course.findById(req.params.id)
-      .populate('enrolledStudents.student', 'firstName lastName email grade avatar');
+    const courseId = parseInt(req.params.id);
+    const courseIndex = courses.findIndex(c => c.id === courseId);
     
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
+    if (courseIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
     }
 
-    // Check if user is instructor or admin
-    if (course.instructor.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Not authorized to view students' });
-    }
+    courses.splice(courseIndex, 1);
 
     res.json({
-      students: course.enrolledStudents,
-      totalStudents: course.totalStudents
+      success: true,
+      message: 'Course deleted successfully'
     });
   } catch (error) {
-    console.error('Get students error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting course',
+      error: error.message
+    });
   }
 });
 

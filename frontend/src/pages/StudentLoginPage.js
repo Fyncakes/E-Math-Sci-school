@@ -93,7 +93,7 @@ const StudentLoginPage = () => {
                 <FaGraduationCap />
               </div>
               <div className="brand-info">
-                <h1>E-School</h1>
+                <h1>G'SON INTERNATIONAL ACADEMY</h1>
                 <span>Student Portal</span>
               </div>
             </div>

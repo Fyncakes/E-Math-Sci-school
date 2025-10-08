@@ -186,7 +186,7 @@ const HomePage = () => {
                 </video>
               </div>
               <div className="video-info">
-                <h3>Welcome to E-School</h3>
+                <h3>Welcome to G'SON INTERNATIONAL ACADEMY</h3>
                 <p>Take a virtual tour of our amazing facilities and see how we're transforming education!</p>
               </div>
             </div>

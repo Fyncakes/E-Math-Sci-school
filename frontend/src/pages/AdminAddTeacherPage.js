@@ -26,7 +26,8 @@ const AdminAddTeacherPage = () => {
     emergencyContact: '',
     emergencyPhone: '',
     bio: '',
-    isActive: true
+    isActive: true,
+    profileImage: null
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -37,11 +38,18 @@ const AdminAddTeacherPage = () => {
   const [activeTab, setActiveTab] = useState('personal');
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
+    const { name, value, type, checked, files } = e.target;
+    if (type === 'file') {
+      setFormData({
+        ...formData,
+        [name]: files[0]
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: type === 'checkbox' ? checked : value
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -52,25 +60,33 @@ const AdminAddTeacherPage = () => {
 
     // Validation
     if (!formData.firstName.trim()) {
-      setError('Please enter teacher\'s first name');
+      setError('First name is required');
       setIsLoading(false);
       return;
     }
 
     if (!formData.lastName.trim()) {
-      setError('Please enter teacher\'s last name');
+      setError('Last name is required');
       setIsLoading(false);
       return;
     }
 
     if (!formData.email.trim()) {
-      setError('Please enter teacher\'s email');
+      setError('Email address is required');
+      setIsLoading(false);
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
       setIsLoading(false);
       return;
     }
 
     if (!formData.password.trim()) {
-      setError('Please enter a password');
+      setError('Password is required');
       setIsLoading(false);
       return;
     }
@@ -89,15 +105,12 @@ const AdminAddTeacherPage = () => {
 
     // API call to backend
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch('http://localhost:5000/api/teachers', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          role: 'teacher'
-        }),
+        body: JSON.stringify(formData)
       });
 
       const data = await response.json();
@@ -237,6 +250,33 @@ const AdminAddTeacherPage = () => {
                         required
                       />
                     </div>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Profile Photo</label>
+                  <div className="file-upload-container">
+                    <input
+                      type="file"
+                      name="profileImage"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="file-input"
+                      id="profileImage"
+                    />
+                    <label htmlFor="profileImage" className="file-upload-label">
+                      <FaUser />
+                      <span>{formData.profileImage ? formData.profileImage.name : 'Choose Profile Photo'}</span>
+                    </label>
+                    {formData.profileImage && (
+                      <div className="image-preview">
+                        <img 
+                          src={URL.createObjectURL(formData.profileImage)} 
+                          alt="Profile preview" 
+                          className="preview-image"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -607,6 +647,7 @@ const AdminAddTeacherPage = () => {
                       }
                     }}
                   >
+                    <FaArrowLeft />
                     Previous
                   </button>
                 )}
@@ -624,6 +665,7 @@ const AdminAddTeacherPage = () => {
                     }}
                   >
                     Next
+                    <FaArrowLeft style={{ transform: 'rotate(180deg)' }} />
                   </button>
                 )}
               </div>

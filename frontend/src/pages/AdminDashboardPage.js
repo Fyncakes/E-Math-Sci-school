@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   FaUsers, FaChalkboardTeacher, FaBook, FaClipboardList, FaChartBar, 
   FaCog, FaBell, FaSignOutAlt, FaPlus, FaEdit, FaTrash, FaEye,
@@ -11,20 +11,205 @@ import {
 } from 'react-icons/fa';
 
 const AdminDashboardPage = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [notifications, setNotifications] = useState(3);
+  const [teachers, setTeachers] = useState([]);
+  const [teachersLoading, setTeachersLoading] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [coursesLoading, setCoursesLoading] = useState(false);
+  const [assignments, setAssignments] = useState([]);
+  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+  const [stats, setStats] = useState({
+    students: 0,
+    teachers: 0,
+    classes: 0,
+    courses: 0,
+    assignments: 0,
+    pending: 0,
+    revenue: 0,
+    growth: 0
+  });
 
-  const stats = {
-    students: 487,
-    teachers: 52,
-    classes: 24,
-    courses: 18,
-    assignments: 156,
-    pending: 8,
-    revenue: 125000,
-    growth: 12.5
+  // Fetch teachers from API
+  const fetchTeachers = async () => {
+    try {
+      setTeachersLoading(true);
+      const response = await fetch(`http://localhost:5000/api/teachers?t=${Date.now()}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Teachers API returns array directly
+        setTeachers(Array.isArray(data) ? data : []);
+      } else {
+        setTeachers([]);
+      }
+    } catch (error) {
+      console.error('Error fetching teachers:', error);
+      setTeachers([]);
+    } finally {
+      setTeachersLoading(false);
+    }
   };
+
+  // Fetch courses from API
+  const fetchCourses = async () => {
+    try {
+      setCoursesLoading(true);
+      const response = await fetch(`http://localhost:5000/api/courses?t=${Date.now()}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Courses API returns { success: true, data: courses, count: courses.length }
+        setCourses(data.success ? (data.data || []) : []);
+      } else {
+        setCourses([]);
+      }
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+      setCourses([]);
+    } finally {
+      setCoursesLoading(false);
+    }
+  };
+
+  // Fetch assignments from API
+  const fetchAssignments = async () => {
+    try {
+      setAssignmentsLoading(true);
+      const response = await fetch(`http://localhost:5000/api/assignments?t=${Date.now()}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Assignments API returns { success: true, data: assignments, count: assignments.length }
+        setAssignments(data.success ? (data.data || []) : []);
+      } else {
+        setAssignments([]);
+      }
+    } catch (error) {
+      console.error('Error fetching assignments:', error);
+      setAssignments([]);
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  };
+
+  // Fetch dashboard stats
+  const fetchStats = async () => {
+    try {
+      // Fetch teachers count
+      const teachersResponse = await fetch(`http://localhost:5000/api/teachers?t=${Date.now()}`);
+      const teachersData = teachersResponse.ok ? await teachersResponse.json() : [];
+      
+      // Fetch admissions count (for students)
+      const admissionsResponse = await fetch(`http://localhost:5000/api/admissions?t=${Date.now()}`);
+      const admissionsData = admissionsResponse.ok ? await admissionsResponse.json() : [];
+      
+      // Fetch courses count
+      const coursesResponse = await fetch(`http://localhost:5000/api/courses?t=${Date.now()}`);
+      const coursesData = coursesResponse.ok ? await coursesResponse.json() : { success: false, data: [] };
+      
+      // Fetch assignments count
+      const assignmentsResponse = await fetch(`http://localhost:5000/api/assignments?t=${Date.now()}`);
+      const assignmentsData = assignmentsResponse.ok ? await assignmentsResponse.json() : { success: false, data: [] };
+      
+      // Calculate stats
+      const approvedStudents = Array.isArray(admissionsData) ? admissionsData.filter(admission => admission.status === 'approved').length : 0;
+      const pendingAdmissions = Array.isArray(admissionsData) ? admissionsData.filter(admission => admission.status === 'pending').length : 0;
+      
+      setStats({
+        students: approvedStudents,
+        teachers: Array.isArray(teachersData) ? teachersData.length : 0,
+        classes: Math.ceil((Array.isArray(teachersData) ? teachersData.length : 0) / 2), // Estimate classes based on teachers
+        courses: coursesData.success ? (coursesData.data ? coursesData.data.length : 0) : 0,
+        assignments: assignmentsData.success ? (assignmentsData.data ? assignmentsData.data.length : 0) : 0,
+        pending: pendingAdmissions,
+        revenue: 125000, // Static for now
+        growth: 12.5 // Static for now
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats(); // Always fetch stats on component mount
+    if (activeTab === 'teachers') {
+      fetchTeachers();
+    } else if (activeTab === 'courses') {
+      fetchCourses();
+    } else if (activeTab === 'assignments') {
+      fetchAssignments();
+    }
+  }, [activeTab]);
+
+  // Refresh all data
+  const refreshAllData = () => {
+    fetchStats();
+    if (activeTab === 'teachers') {
+      fetchTeachers();
+    } else if (activeTab === 'courses') {
+      fetchCourses();
+    } else if (activeTab === 'assignments') {
+      fetchAssignments();
+    }
+  };
+
+  const handleDeleteTeacher = async (teacherId) => {
+    if (window.confirm('Are you sure you want to delete this teacher?')) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/teachers/${teacherId}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          // Refresh the teachers list
+          fetchTeachers();
+        } else {
+          alert('Failed to delete teacher');
+        }
+      } catch (error) {
+        console.error('Error deleting teacher:', error);
+        alert('Failed to delete teacher');
+      }
+    }
+  };
+
+  const handleDeleteCourse = async (courseId) => {
+    if (window.confirm('Are you sure you want to delete this course?')) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/courses/${courseId}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          // Refresh the courses list
+          fetchCourses();
+        } else {
+          alert('Failed to delete course');
+        }
+      } catch (error) {
+        console.error('Error deleting course:', error);
+        alert('Failed to delete course');
+      }
+    }
+  };
+
+  const handleDeleteAssignment = async (assignmentId) => {
+    if (window.confirm('Are you sure you want to delete this assignment?')) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/assignments/${assignmentId}`, {
+          method: 'DELETE'
+        });
+        if (response.ok) {
+          // Refresh the assignments list
+          fetchAssignments();
+        } else {
+          alert('Failed to delete assignment');
+        }
+      } catch (error) {
+        console.error('Error deleting assignment:', error);
+        alert('Failed to delete assignment');
+      }
+    }
+  };
+
 
   const recentActivity = [
     { 
@@ -130,7 +315,7 @@ const AdminDashboardPage = () => {
               <FaGraduationCap />
             </div>
             <div className="admin-title">
-              <h1>E-School Admin</h1>
+              <h1>G'SON INTERNATIONAL ACADEMY Admin</h1>
               <span>Management Dashboard</span>
             </div>
           </div>
@@ -140,6 +325,10 @@ const AdminDashboardPage = () => {
               <FaSearch />
               <input type="text" placeholder="Search students, teachers, courses..." />
             </div>
+            
+            <button className="admin-refresh-btn" onClick={refreshAllData} title="Refresh Data">
+              <FaArrowUp />
+            </button>
             
             <button className="admin-notification-btn" onClick={dismissNotification}>
               <FaBell />
@@ -196,7 +385,7 @@ const AdminDashboardPage = () => {
             >
               <FaChalkboardTeacher />
               <span>Teachers</span>
-              <span className="nav-badge">{stats.teachers}</span>
+              <span className="nav-badge">{teachers.length}</span>
             </button>
             
             <button 
@@ -205,7 +394,7 @@ const AdminDashboardPage = () => {
             >
               <FaBook />
               <span>Courses</span>
-              <span className="nav-badge">{stats.courses}</span>
+              <span className="nav-badge">{courses.length}</span>
             </button>
             
             <button 
@@ -214,7 +403,7 @@ const AdminDashboardPage = () => {
             >
               <FaClipboardList />
               <span>Assignments</span>
-              <span className="nav-badge">{stats.assignments}</span>
+              <span className="nav-badge">{assignments.length}</span>
             </button>
             
             <Link 
@@ -269,11 +458,23 @@ const AdminDashboardPage = () => {
                     <FaPlus />
                     Quick Add
                   </button>
-                  <button className="btn-secondary">
+                  <Link to="/admin/export-data" className="btn-secondary">
                     <FaDownload />
                     Export Data
-                  </button>
+                  </Link>
                 </div>
+              </div>
+
+              {/* Debug Panel */}
+              <div className="debug-panel" style={{ background: '#f8f9fa', padding: '1rem', margin: '1rem 0', borderRadius: '8px', border: '1px solid #dee2e6' }}>
+                <h4>Debug Information:</h4>
+                <p><strong>Teachers:</strong> {teachers.length} loaded {teachersLoading && '(Loading...)'}</p>
+                <p><strong>Courses:</strong> {courses.length} loaded {coursesLoading && '(Loading...)'}</p>
+                <p><strong>Assignments:</strong> {assignments.length} loaded {assignmentsLoading && '(Loading...)'}</p>
+                <p><strong>Stats:</strong> Students: {stats.students}, Teachers: {stats.teachers}, Courses: {stats.courses}, Assignments: {stats.assignments}</p>
+                <button onClick={refreshAllData} className="btn-primary" style={{ marginTop: '0.5rem' }}>
+                  <FaArrowUp /> Refresh All Data
+                </button>
               </div>
 
               {/* Modern Stats Grid */}
@@ -479,18 +680,26 @@ const AdminDashboardPage = () => {
               <div className="section-header">
                 <h2>Student Management</h2>
                 <div className="section-actions">
-                  <button className="btn-primary">
+                  <Link to="/admin/admissions" className="btn-primary">
+                    <FaUsers />
+                    Manage Admissions
+                  </Link>
+                  <Link to="/admin/teachers" className="btn-primary">
+                    <FaChalkboardTeacher />
+                    Manage Teachers
+                  </Link>
+                  <Link to="/admin/add-student" className="btn-secondary">
                     <FaPlus />
                     Add Student
-                  </button>
-                  <button className="btn-secondary">
+                  </Link>
+                  <Link to="/admin/import-students" className="btn-secondary">
                     <FaUpload />
                     Import Students
-                  </button>
-                  <button className="btn-outline">
+                  </Link>
+                  <Link to="/admin/export-data" className="btn-outline">
                     <FaDownload />
                     Export Data
-                  </button>
+                  </Link>
                 </div>
               </div>
               
@@ -592,7 +801,72 @@ const AdminDashboardPage = () => {
                   </div>
                 </div>
                 <div className="table-container">
-                  <p className="empty-state">Teacher management interface will be implemented here.</p>
+                  {teachersLoading ? (
+                    <div className="loading-state">
+                      <div className="spinner"></div>
+                      <p>Loading teachers...</p>
+                    </div>
+                  ) : teachers.length > 0 ? (
+                    <div className="teachers-grid">
+                      {teachers.map((teacher) => (
+                        <div key={teacher._id} className="teacher-card">
+                          <div className="teacher-avatar">
+                            <FaChalkboardTeacher />
+                          </div>
+                          <div className="teacher-info">
+                            <h4>{teacher.firstName} {teacher.lastName}</h4>
+                            <p className="teacher-title">{teacher.title}</p>
+                            <p className="teacher-email">{teacher.email}</p>
+                            <div className="teacher-subjects">
+                              {teacher.subjects && teacher.subjects.map((subject, index) => (
+                                <span key={index} className="subject-tag">{subject}</span>
+                              ))}
+                            </div>
+                            <div className="teacher-stats">
+                              <span className="stat">
+                                <FaStar /> {teacher.rating || 'N/A'}
+                              </span>
+                              <span className="stat">
+                                <FaUsers /> {teacher.studentsTaught || 0}
+                              </span>
+                              <span className={`status ${teacher.status || 'active'}`}>
+                                {teacher.status || 'Active'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="teacher-actions">
+                            <button 
+                              className="btn-icon" 
+                              title="View Details"
+                              onClick={() => navigate(`/admin/teachers/view/${teacher._id}`)}
+                            >
+                              <FaEye />
+                            </button>
+                            <button 
+                              className="btn-icon" 
+                              title="Edit Teacher"
+                              onClick={() => navigate(`/admin/teachers/edit/${teacher._id}`)}
+                            >
+                              <FaEdit />
+                            </button>
+                            <button 
+                              className="btn-icon danger" 
+                              title="Remove Teacher"
+                              onClick={() => handleDeleteTeacher(teacher._id)}
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="empty-state">
+                      <FaChalkboardTeacher />
+                      <h3>No Teachers Found</h3>
+                      <p>No teachers have been added yet. Click "Add Teacher" to get started.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -604,7 +878,10 @@ const AdminDashboardPage = () => {
               <div className="section-header">
                 <h2>Course Management</h2>
                 <div className="section-actions">
-                  <button className="btn-primary">
+                  <button 
+                    className="btn-primary"
+                    onClick={() => navigate('/admin/create-course')}
+                  >
                     <FaPlus />
                     Create Course
                   </button>
@@ -630,7 +907,73 @@ const AdminDashboardPage = () => {
                   </div>
                 </div>
                 <div className="table-container">
-                  <p className="empty-state">Course management interface will be implemented here.</p>
+                  {coursesLoading ? (
+                    <div className="loading-state">
+                      <div className="spinner"></div>
+                      <p>Loading courses...</p>
+                    </div>
+                  ) : courses.length === 0 ? (
+                    <div className="empty-state">
+                      <FaBook />
+                      <h3>No courses found</h3>
+                      <p>Create your first course to get started.</p>
+                      <button 
+                        className="btn-primary"
+                        onClick={() => navigate('/admin/create-course')}
+                      >
+                        <FaPlus />
+                        Create Course
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="courses-grid">
+                      {courses.map((course) => (
+                        <div key={course.id} className="course-card">
+                          <div className="course-header">
+                            <h4>{course.title}</h4>
+                            <span className={`status-badge ${course.isActive ? 'active' : 'inactive'}`}>
+                              {course.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                          <div className="course-details">
+                            <p className="course-description">{course.description}</p>
+                            <div className="course-meta">
+                              <span><FaChalkboardTeacher /> {course.instructor}</span>
+                              <span><FaUsers /> {course.maxStudents} students</span>
+                              <span><FaClock /> {course.duration} weeks</span>
+                            </div>
+                            <div className="course-subject">
+                              <span className="subject-tag">{course.subject}</span>
+                              <span className="grade-tag">{course.grade}</span>
+                            </div>
+                          </div>
+                          <div className="course-actions">
+                            <button 
+                              className="btn-outline"
+                              onClick={() => navigate(`/admin/edit-course/${course.id}`)}
+                            >
+                              <FaEdit />
+                              Edit
+                            </button>
+                            <button 
+                              className="btn-outline"
+                              onClick={() => navigate(`/admin/view-course/${course.id}`)}
+                            >
+                              <FaEye />
+                              View
+                            </button>
+                            <button 
+                              className="btn-danger"
+                              onClick={() => handleDeleteCourse(course.id)}
+                            >
+                              <FaTrash />
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -642,7 +985,10 @@ const AdminDashboardPage = () => {
               <div className="section-header">
                 <h2>Assignment Management</h2>
                 <div className="section-actions">
-                  <button className="btn-primary">
+                  <button 
+                    className="btn-primary"
+                    onClick={() => navigate('/admin/create-assignment')}
+                  >
                     <FaPlus />
                     Create Assignment
                   </button>
@@ -668,7 +1014,71 @@ const AdminDashboardPage = () => {
                   </div>
                 </div>
                 <div className="table-container">
-                  <p className="empty-state">Assignment management interface will be implemented here.</p>
+                  {assignmentsLoading ? (
+                    <div className="loading-state">
+                      <div className="spinner"></div>
+                      <p>Loading assignments...</p>
+                    </div>
+                  ) : assignments.length === 0 ? (
+                    <div className="empty-state">
+                      <FaClipboardList />
+                      <h3>No assignments found</h3>
+                      <p>Create your first assignment to get started.</p>
+                      <button 
+                        className="btn-primary"
+                        onClick={() => navigate('/admin/create-assignment')}
+                      >
+                        <FaPlus />
+                        Create Assignment
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="assignments-grid">
+                      {assignments.map((assignment) => (
+                        <div key={assignment.id} className="assignment-card">
+                          <div className="assignment-header">
+                            <h4>{assignment.title}</h4>
+                            <span className={`status-badge ${assignment.isActive ? 'active' : 'inactive'}`}>
+                              {assignment.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                          <div className="assignment-details">
+                            <p className="assignment-description">{assignment.description}</p>
+                            <div className="assignment-meta">
+                              <span><FaChalkboardTeacher /> {assignment.instructor}</span>
+                              <span><FaFileAlt /> {assignment.maxPoints} points</span>
+                              <span><FaCalendarAlt /> Due: {new Date(assignment.dueDate).toLocaleDateString()}</span>
+                            </div>
+                            <div className="assignment-subject">
+                              <span className="subject-tag">{assignment.subject}</span>
+                              <span className="grade-tag">{assignment.grade}</span>
+                              <span className="course-tag">{assignment.course}</span>
+                            </div>
+                          </div>
+                          <div className="assignment-actions">
+                            <button 
+                              className="btn-outline"
+                              onClick={() => navigate(`/admin/edit-assignment/${assignment.id}`)}
+                            >
+                              <FaEdit />
+                              Edit
+                            </button>
+                            <button className="btn-outline">
+                              <FaEye />
+                              View
+                            </button>
+                            <button 
+                              className="btn-danger"
+                              onClick={() => handleDeleteAssignment(assignment.id)}
+                            >
+                              <FaTrash />
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

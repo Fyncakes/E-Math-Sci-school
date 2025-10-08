@@ -27,6 +27,16 @@ app.use(cors({
   credentials: true
 }));
 
+// Disable caching for API routes
+app.use('/api', (req, res, next) => {
+  res.set({
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  });
+  next();
+});
+
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -49,6 +59,8 @@ app.use('/api/courses', require('./routes/courses'));
 app.use('/api/assignments', require('./routes/assignments'));
 app.use('/api/quiz', require('./routes/quiz'));
 app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/teachers', require('./routes/teachers'));
+app.use('/api/admissions', require('./routes/admissions'));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

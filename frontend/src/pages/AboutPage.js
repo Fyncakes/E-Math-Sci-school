@@ -1,8 +1,113 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaGraduationCap, FaRocket, FaUsers, FaAward, FaBook, FaLightbulb, FaHeart, FaStar, FaTrophy, FaGlobe, FaHandshake, FaChartLine, FaBullseye } from 'react-icons/fa';
+import { 
+  FaGraduationCap, FaRocket, FaUsers, FaAward, FaBook, FaLightbulb, 
+  FaHeart, FaStar, FaTrophy, FaGlobe, FaHandshake, FaChartLine, 
+  FaBullseye, FaChalkboardTeacher, FaEnvelope, FaPhone, FaMapMarkerAlt,
+  FaEye, FaComment, FaThumbsUp, FaUser, FaCalendar, FaGraduationCap as FaGrad
+} from 'react-icons/fa';
 
 const AboutPage = () => {
+  const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [showTeacherModal, setShowTeacherModal] = useState(false);
+
+  // Fetch teachers from API
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/teachers');
+        if (response.ok) {
+          const data = await response.json();
+          setTeachers(data);
+        } else {
+          // Fallback to demo data if API fails
+          setTeachers([
+            {
+              id: 1,
+              name: "Peter Omara",
+              title: "Senior Mathematics & Physics Teacher",
+              subjects: ["Mathematics", "Physics"],
+              experience: "15+ years",
+              education: "MSc Applied Mathematics, BSc Physics",
+              bio: "Peter Omara is a distinguished educator with over 15 years of experience in teaching mathematics and physics. He specializes in making complex mathematical concepts accessible to students through innovative teaching methods and real-world applications.",
+              email: "peter.omara@gsonschool.edu",
+              phone: "+254 700 123 456",
+              rating: 4.9,
+              studentsTaught: 2000,
+              achievements: ["Best Teacher Award 2023", "Student Excellence Recognition"],
+              specialties: ["Calculus", "Algebra", "Mechanics", "Thermodynamics"],
+              image: "/api/placeholder/300/300"
+            },
+            {
+              id: 2,
+              name: "Dr. Sarah Chen",
+              title: "Head of Science Department",
+              subjects: ["Chemistry", "Biology"],
+              experience: "12+ years",
+              education: "PhD Chemistry, MSc Biology",
+              bio: "Dr. Sarah Chen brings real-world research experience to the classroom, having worked in pharmaceutical research before transitioning to education.",
+              email: "sarah.chen@gsonschool.edu",
+              phone: "+254 700 234 567",
+              rating: 4.8,
+              studentsTaught: 1500,
+              achievements: ["Research Excellence Award", "Innovation in Teaching"],
+              specialties: ["Organic Chemistry", "Molecular Biology", "Research Methods"],
+              image: "/api/placeholder/300/300"
+            },
+            {
+              id: 3,
+              name: "Mr. David Lee",
+              title: "Computer Science Teacher",
+              subjects: ["Computer Science", "Programming"],
+              experience: "10+ years",
+              education: "MSc Computer Science, BSc Software Engineering",
+              bio: "Mr. David Lee is passionate about preparing students for the digital future through hands-on programming and computer science education.",
+              email: "david.lee@gsonschool.edu",
+              phone: "+254 700 345 678",
+              rating: 4.7,
+              studentsTaught: 1200,
+              achievements: ["Tech Innovation Award", "Student Project Excellence"],
+              specialties: ["Python Programming", "Web Development", "Data Structures"],
+              image: "/api/placeholder/300/300"
+            }
+          ]);
+        }
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+        // Use demo data as fallback
+        setTeachers([
+          {
+            id: 1,
+            name: "Peter Omara",
+            title: "Senior Mathematics & Physics Teacher",
+            subjects: ["Mathematics", "Physics"],
+            experience: "15+ years",
+            education: "MSc Applied Mathematics, BSc Physics",
+            bio: "Peter Omara is a distinguished educator with over 15 years of experience in teaching mathematics and physics. He specializes in making complex mathematical concepts accessible to students through innovative teaching methods and real-world applications.",
+            email: "peter.omara@gsonschool.edu",
+            phone: "+254 700 123 456",
+            rating: 4.9,
+            studentsTaught: 2000,
+            achievements: ["Best Teacher Award 2023", "Student Excellence Recognition"],
+            specialties: ["Calculus", "Algebra", "Mechanics", "Thermodynamics"],
+            image: "/api/placeholder/300/300"
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+  const handleTeacherClick = (teacher) => {
+    setSelectedTeacher(teacher);
+    setShowTeacherModal(true);
+  };
+
   return (
     <div className="about-page">
       {/* Hero Section */}
@@ -20,326 +125,265 @@ const AboutPage = () => {
             <p className="hero-subtitle">
               Empowering the next generation of innovators through exceptional mathematics and science education
             </p>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">2,500+</div>
-                <div className="stat-label">Students Taught</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">95%</div>
-                <div className="stat-label">Success Rate</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">50+</div>
-                <div className="stat-label">Expert Teachers</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-number">15</div>
-                <div className="stat-label">Years Experience</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Our Story */}
-      <section className="our-story">
+      {/* School Overview */}
+      <section className="school-overview">
         <div className="container">
           <div className="section-header">
             <div className="section-badge">
               <FaRocket />
-              <span>Our Journey</span>
+              <span>Excellence in Education</span>
             </div>
-            <h2>Our Story</h2>
+            <h2>Why Choose G'SON INTERNATIONAL ACADEMY?</h2>
             <p className="section-subtitle">
-              From a vision to reality - how we're transforming education
+              We're committed to providing world-class education through our exceptional faculty and innovative teaching methods
             </p>
           </div>
           
-          <div className="story-content">
-            <div className="story-text">
-              <div className="story-card">
-                <div className="story-icon">
-                  <FaLightbulb />
-                </div>
-                <div className="story-content-text">
-                  <h3>The Vision</h3>
-                  <p>
-                    Founded in 2020, G'SON INTERNATIONAL ACADEMY was established with a revolutionary vision to transform mathematics and science education. 
-                    We believe that every student has the potential to excel in these subjects when provided with the right guidance, 
-                    resources, and learning environment.
-                  </p>
-                </div>
+          <div className="overview-grid">
+            <div className="overview-card">
+              <div className="overview-icon">
+                <FaChalkboardTeacher />
               </div>
-              
-              <div className="story-card">
-                <div className="story-icon">
-                  <FaHeart />
-                </div>
-                <div className="story-content-text">
-                  <h3>The Mission</h3>
-                  <p>
-                    Our journey began when a group of passionate educators recognized the need for a more engaging and effective approach 
-                    to teaching math and science. We wanted to create a place where students could not only learn these subjects but 
-                    truly fall in love with them.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="story-card">
-                <div className="story-icon">
-                  <FaTrophy />
-                </div>
-                <div className="story-content-text">
-                  <h3>The Impact</h3>
-                  <p>
-                    Today, we're proud to have helped thousands of students discover their potential in mathematics and science. 
-                    Our innovative teaching methods and personalized approach have created a community of lifelong learners 
-                    who are ready to shape the future.
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="story-visual">
-              <div className="visual-card">
-                <div className="visual-icon">
-                  <FaGraduationCap />
-                </div>
-                <h4>Our Beautiful Campus</h4>
-                <p>State-of-the-art facilities designed for optimal learning</p>
-                <div className="visual-features">
-                  <div className="feature-item">
-                    <FaBook />
-                    <span>Modern Classrooms</span>
-                  </div>
-                  <div className="feature-item">
-                    <FaUsers />
-                    <span>Interactive Labs</span>
-                  </div>
-                  <div className="feature-item">
-                    <FaAward />
-                    <span>Excellence Center</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Vision, Mission & Values */}
-      <section className="vision-mission">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-badge">
-              <FaStar />
-              <span>Our Foundation</span>
-            </div>
-            <h2>Our Vision, Mission & Values</h2>
-            <p className="section-subtitle">
-              The principles that guide everything we do
-            </p>
-          </div>
-          
-          <div className="vmv-grid">
-            <div className="vmv-card vision-card">
-              <div className="vmv-icon">
-                <FaGlobe />
-              </div>
-              <div className="vmv-content">
-                <h3>Vision</h3>
-                <p>To be the leading institution in mathematics and science education, nurturing the next generation of innovators and problem-solvers who will shape the future.</p>
-                <div className="vmv-highlight">
-                  <FaRocket />
-                  <span>Shaping Tomorrow's Leaders</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="vmv-card mission-card">
-              <div className="vmv-icon">
-                <FaBullseye />
-              </div>
-              <div className="vmv-content">
-                <h3>Mission</h3>
-                <p>To provide exceptional education in mathematics and science through innovative teaching methods, cutting-edge technology, and personalized learning experiences that inspire lifelong learning.</p>
-                <div className="vmv-highlight">
-                  <FaLightbulb />
-                  <span>Inspiring Lifelong Learning</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="vmv-card values-card">
-              <div className="vmv-icon">
-                <FaHeart />
-              </div>
-              <div className="vmv-content">
-                <h3>Values</h3>
-                <div className="values-list">
-                  <div className="value-item">
-                    <FaAward />
-                    <span>Excellence in education and student outcomes</span>
-                  </div>
-                  <div className="value-item">
-                    <FaLightbulb />
-                    <span>Innovation in teaching and learning methods</span>
-                  </div>
-                  <div className="value-item">
-                    <FaHandshake />
-                    <span>Integrity and ethical conduct</span>
-                  </div>
-                  <div className="value-item">
-                    <FaUsers />
-                    <span>Respect for diversity and inclusion</span>
-                  </div>
-                  <div className="value-item">
-                    <FaChartLine />
-                    <span>Continuous improvement and growth</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership & Staff */}
-      <section className="leadership">
-        <div className="container">
-          <h2 className="section-title">Meet Our Leadership Team</h2>
-          <div className="leadership-grid">
-            <div className="leader-card featured">
-              <div className="leader-image">
-                <div className="placeholder-avatar">👨‍🏫</div>
-              </div>
-              <div className="leader-info">
-                <h3>Peter Omara</h3>
-                <p className="position">Senior Mathematics & Physics Teacher</p>
-                <p className="bio">
-                  Peter Omara is a distinguished educator with over 15 years of experience in teaching mathematics and physics. 
-                  He holds a Master's degree in Applied Mathematics and a Bachelor's in Physics from the University of Nairobi. 
-                  Peter specializes in making complex mathematical concepts accessible to students through innovative teaching methods 
-                  and real-world applications. His passion for education has helped over 2,000 students achieve excellence in 
-                  mathematics and physics, with many going on to pursue careers in engineering, medicine, and research.
-                </p>
-                <div className="teacher-credentials">
-                  <span className="credential">MSc Applied Mathematics</span>
-                  <span className="credential">BSc Physics</span>
-                  <span className="credential">15+ Years Experience</span>
-                </div>
-              </div>
-            </div>
-            <div className="leader-card">
-              <div className="leader-image">
-                <div className="placeholder-avatar">👨‍💼</div>
-              </div>
-              <div className="leader-info">
-                <h3>Dr. Sarah Williams</h3>
-                <p className="position">Principal & Founder</p>
-                <p className="bio">With over 20 years in education, Dr. Williams is passionate about making math and science accessible to all students.</p>
-              </div>
-            </div>
-            <div className="leader-card">
-              <div className="leader-image">
-                <div className="placeholder-avatar">👩‍🔬</div>
-              </div>
-              <div className="leader-info">
-                <h3>Prof. Michael Johnson</h3>
-                <p className="position">Head of Science Department</p>
-                <p className="bio">A former NASA scientist, Prof. Johnson brings real-world experience to our science curriculum.</p>
-              </div>
-            </div>
-            <div className="leader-card">
-              <div className="leader-image">
-                <div className="placeholder-avatar">👨‍🏫</div>
-              </div>
-              <div className="leader-info">
-                <h3>Ms. Emily Chen</h3>
-                <p className="position">Head of Mathematics</p>
-                <p className="bio">Ms. Chen has developed innovative teaching methods that have helped thousands of students excel in mathematics.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Teaching Excellence */}
-      <section className="teaching-excellence">
-        <div className="container">
-          <h2 className="section-title">Our Teaching Excellence</h2>
-          <div className="excellence-grid">
-            <div className="excellence-card">
-              <div className="excellence-icon">🎓</div>
               <h3>Expert Faculty</h3>
-              <p>Our teachers hold advanced degrees in their respective fields and have years of teaching experience.</p>
+              <p>Our teachers hold advanced degrees and have years of teaching experience in their respective fields.</p>
             </div>
-            <div className="excellence-card">
-              <div className="excellence-icon">🔬</div>
-              <h3>Hands-on Learning</h3>
-              <p>We believe in learning by doing, with practical experiments and real-world applications.</p>
-            </div>
-            <div className="excellence-card">
-              <div className="excellence-icon">💡</div>
+            
+            <div className="overview-card">
+              <div className="overview-icon">
+                <FaLightbulb />
+              </div>
               <h3>Innovative Methods</h3>
               <p>We use cutting-edge teaching techniques and technology to make learning engaging and effective.</p>
             </div>
-            <div className="excellence-card">
-              <div className="excellence-icon">🌟</div>
-              <h3>Student Success</h3>
+            
+            <div className="overview-card">
+              <div className="overview-icon">
+                <FaTrophy />
+              </div>
+              <h3>Proven Results</h3>
               <p>Our students consistently achieve outstanding results in national and international competitions.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* School Statistics */}
-      <section className="school-stats">
+      {/* Our Teachers */}
+      <section className="our-teachers">
         <div className="container">
-          <h2 className="section-title">Our Impact in Numbers</h2>
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">2,500+</div>
-              <div className="stat-label">Students Taught</div>
+          <div className="section-header">
+            <div className="section-badge">
+              <FaChalkboardTeacher />
+              <span>Meet Our Faculty</span>
             </div>
-            <div className="stat-item">
-              <div className="stat-number">95%</div>
-              <div className="stat-label">Success Rate</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">50+</div>
-              <div className="stat-label">Expert Teachers</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">15</div>
-              <div className="stat-label">Years of Excellence</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">100+</div>
-              <div className="stat-label">Awards Won</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">98%</div>
-              <div className="stat-label">Parent Satisfaction</div>
-            </div>
+            <h2>Our Expert Teachers</h2>
+            <p className="section-subtitle">
+              Learn from experienced educators who are passionate about your success
+            </p>
           </div>
+          
+          {loading ? (
+            <div className="loading-section">
+              <div className="spinner"></div>
+              <p>Loading our amazing teachers...</p>
+            </div>
+          ) : (
+            <div className="teachers-grid">
+              {teachers.map((teacher) => (
+                <div key={teacher.id} className="teacher-card" onClick={() => handleTeacherClick(teacher)}>
+                  <div className="teacher-image">
+                    <img src={teacher.image} alt={teacher.name} />
+                    <div className="teacher-overlay">
+                      <FaEye />
+                      <span>View Profile</span>
+                    </div>
+                  </div>
+                  <div className="teacher-info">
+                    <h3>{teacher.name}</h3>
+                    <p className="teacher-title">{teacher.title}</p>
+                    <div className="teacher-subjects">
+                      {teacher.subjects.map((subject, index) => (
+                        <span key={index} className="subject-tag">{subject}</span>
+                      ))}
+                    </div>
+                    <div className="teacher-stats">
+                      <div className="stat">
+                        <FaStar />
+                        <span>{teacher.rating}</span>
+                      </div>
+                      <div className="stat">
+                        <FaUsers />
+                        <span>{teacher.studentsTaught}+ students</span>
+                      </div>
+                      <div className="stat">
+                        <FaCalendar />
+                        <span>{teacher.experience}</span>
+                      </div>
+                    </div>
+                    <button className="review-btn">
+                      <FaComment />
+                      Leave a Review
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="cta-section">
-        <div className="container">
-          <div className="cta-content">
-            <h2>Ready to Join Our Community?</h2>
-            <p>Become part of our amazing learning community and start your journey to excellence!</p>
-            <div className="cta-buttons">
-              <Link to="/register" className="btn-primary">Apply Now</Link>
-              <Link to="/contact" className="btn-secondary">Contact Us</Link>
+      {/* Teacher Modal */}
+      {showTeacherModal && selectedTeacher && (
+        <div className="teacher-modal-overlay" onClick={() => setShowTeacherModal(false)}>
+          <div className="teacher-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="teacher-modal-image">
+                <img src={selectedTeacher.image} alt={selectedTeacher.name} />
+              </div>
+              <div className="teacher-modal-info">
+                <h2>{selectedTeacher.name}</h2>
+                <p className="teacher-modal-title">{selectedTeacher.title}</p>
+                <div className="teacher-modal-rating">
+                  <FaStar />
+                  <span>{selectedTeacher.rating}/5.0</span>
+                  <span className="rating-text">({selectedTeacher.studentsTaught}+ students taught)</span>
+                </div>
+              </div>
+              <button className="modal-close" onClick={() => setShowTeacherModal(false)}>
+                ×
+              </button>
+            </div>
+            
+            <div className="modal-content">
+              <div className="teacher-details">
+                <div className="detail-section">
+                  <h3>About {selectedTeacher.name ? selectedTeacher.name.split(' ')[0] : 'Teacher'}</h3>
+                  <p>{selectedTeacher.bio}</p>
+                </div>
+                
+                <div className="detail-section">
+                  <h3>Education & Experience</h3>
+                  <p><strong>Education:</strong> {selectedTeacher.education}</p>
+                  <p><strong>Experience:</strong> {selectedTeacher.experience}</p>
+                </div>
+                
+                <div className="detail-section">
+                  <h3>Specialties</h3>
+                  <div className="specialties-list">
+                    {selectedTeacher.specialties.map((specialty, index) => (
+                      <span key={index} className="specialty-tag">{specialty}</span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="detail-section">
+                  <h3>Achievements</h3>
+                  <ul className="achievements-list">
+                    {selectedTeacher.achievements.map((achievement, index) => (
+                      <li key={index}><FaAward /> {achievement}</li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="detail-section">
+                  <h3>Contact Information</h3>
+                  <div className="contact-info">
+                    <div className="contact-item">
+                      <FaEnvelope />
+                      <span>{selectedTeacher.email}</span>
+                    </div>
+                    <div className="contact-item">
+                      <FaPhone />
+                      <span>{selectedTeacher.phone}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="teacher-reviews">
+                <h3>Student Reviews</h3>
+                <div className="reviews-section">
+                  <div className="review-card">
+                    <div className="review-header">
+                      <div className="reviewer-info">
+                        <FaUser />
+                        <span>Student A</span>
+                      </div>
+                      <div className="review-rating">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                      </div>
+                    </div>
+                    <p className="review-text">
+                      "Mr. {selectedTeacher.name ? selectedTeacher.name.split(' ')[0] : 'Teacher'} is an amazing teacher! He makes complex concepts easy to understand."
+                    </p>
+                    <div className="review-actions">
+                      <button className="helpful-btn">
+                        <FaThumbsUp />
+                        Helpful
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="review-card">
+                    <div className="review-header">
+                      <div className="reviewer-info">
+                        <FaUser />
+                        <span>Student B</span>
+                      </div>
+                      <div className="review-rating">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                      </div>
+                    </div>
+                    <p className="review-text">
+                      "Excellent teaching methods and very patient with students. Highly recommended!"
+                    </p>
+                    <div className="review-actions">
+                      <button className="helpful-btn">
+                        <FaThumbsUp />
+                        Helpful
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="add-review">
+                  <h4>Leave a Review</h4>
+                  <form className="review-form">
+                    <div className="form-group">
+                      <label>Your Rating</label>
+                      <div className="rating-input">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <FaStar key={star} className="rating-star" />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label>Your Review</label>
+                      <textarea placeholder="Share your experience with this teacher..."></textarea>
+                    </div>
+                    <button type="submit" className="submit-review-btn">
+                      <FaComment />
+                      Submit Review
+                    </button>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      )}
+
     </div>
   );
 };
